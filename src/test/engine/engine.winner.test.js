@@ -44,6 +44,7 @@ describe('getWinner tests', () => {
     playerData.ai3.hand = createHand([8, 6], ['h', 'c']); // 3 of a kind
     tableCards = createHand([2, 3, 5, 8, 8], ['d','c','s','s','d']);
     let testScoreObj = getWinner(playerData, tableCards);
+    console.log(testScoreObj);
     expect(testScoreObj.owner).toEqual('player');
 
     playerData.player.hand = createHand([2, 2], ['h', 's']); // 4 of a kind
