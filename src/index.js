@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Poker from './Poker';
+import App from './app';
+import { BrowserRouter as Router } from 'react-router-dom'
 
-ReactDOM.render(<Poker />, document.getElementById('root'));
+ReactDOM.render(<Router><App/></Router>, document.getElementById('root'));

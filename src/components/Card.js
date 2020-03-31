@@ -1,51 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardBack from '../assets/images/cardback.jpg';
-import styled from 'styled-components';
 
-const StyledCard = styled.div`
-  width: 100%;
-  width: ${props => props.width}px;
-  color: ${props => props.card.color};
-  height: ${props => props.width * 1.4}px;
-  background-color: ${props => (props.card.highlight ? 'skyblue' : 'white')};
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  box-shadow: 3px 4px rgba(0, 0, 0, 0.5);
-  border-radius: 3px;
-  margin: 8px;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-  .card-title {
-    font-family: Pokerface;
-    font-size: ${props => props.width * 0.3}px;
-    margin: 10% auto 20% auto;
-    align-self: flex-start;
-  }
-  .card-suit {
-    font-size: ${props => props.width * 0.4}px;
-    display: flex;
-    justify-content: center;
-  }
-`;
 
-const Card = ({ shown, card, width }) => {
-  if (!shown) {
-    return (
-      <StyledCard card={card} width={width}>
-        <img src={CardBack} alt="Cardback" />
-      </StyledCard>
-    );
+const Card = ({ width , isClickable}) => {
+
+  const [isSelected, setSelected] = useState(false);
+
+  // 5 for middle
+  // 4 for bottom
+  // 7 for top
+  const cardStyle = {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: `${width}em`,
+    height: `${width * 1.4}em`,
+    backgroundColor: '#22313f',
+    color: 'white',
+    borderRadius: '3px',
+    flexDirection: 'column',
+    boxShadow: '3px 4px rgba(0, 0, 0, 0.2)',
+    margin: '0.2em',
+    '&:hover': {
+      borderColor: 'yellow',
+      cursor: 'pointer'  
+    }
+  };
+
+  const cardStyleSelected = {
+    ...cardStyle,
+    borderColor: 'yellow',
+    borderStyle: 'solid',
+  };
+
+  const cardTitle = {
+    fontFamily: 'Pokerface',
+    fontSize: `${width * 0.3}em`,
+    margin: '10% auto 20% auto',
+    alignSelf: 'flex-start',
   }
+
+  const cardSuit = {
+    fontSize: `${width * 0.4}em`,
+    width: '100%',
+    color: 'white'
+  }
+
+  const img = {
+    height: '100%',
+    width: '100%'
+  }
+
+  const onPressHandle = () => {
+    setSelected(!isSelected)
+  }
+
   return (
-    <StyledCard card={card} width={width}>
-      <h1 className="card-title">{card.short}</h1>
-      <div className="card-suit">{card.suitEmoji}</div>
-    </StyledCard>
-  );
-};
+    <div draggable style={isSelected ? cardStyleSelected : cardStyle} onClick={isClickable ? onPressHandle : null}>
+      <h1 className="centered" style={cardTitle}>A</h1>
+      <div className="centered" style={cardSuit}><span role="img" aria-label="club">♤</span></div>
+    </div>
+)};
 
 export default Card;
+
+// <h1 style={cardTitle}>A</h1>
+// <div style={cardSuit}>♣️</div>
