@@ -1,6 +1,8 @@
 import React from 'react';
 
-import Card from './card';
+import OpponentCards from './opponentCards';
+import PlayingCards from './playingCards';
+import PlayerCards from './playerCards';
 
 const table = {
   display: 'flex',
@@ -11,82 +13,33 @@ const table = {
   flexDirection: 'column'
 };
 
-const top = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  height: '33%'
-}
-
-const mostRecentCard = {
-  width: '70%'
-}
-
-const actions = {
-  width: '15%'
-}
-
-const bottom = {
-  height: '33%'
-}
-
 let width = 1;
 
 if (window.innerWidth < 900) {
   width = window.innerWidth / 1700
 }
 
-const player = 3;
-
 const Home = () => {
-  const topColumn = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: `${100 / (player - 1)}%`,
-    flexDirection: 'column',
-  }
+  const data = [
+    {name: 'Byandika! @Boss', cardLeft: 13},
+    {name: 'jane', cardLeft: 1},
+    {name: 'doe', cardLeft: 3},
+  ];
 
-  return (<div style={table}>
-    <div style={top}>
-      <div style={topColumn}>
-        <Card width={7 * width}/>
-        <div>Harry</div>
-      </div>
-      <div style={topColumn}>
-        <Card width={7 * width}/>
-        <div>Harry</div>
-      </div>
+  const cards = [
+    {displayName: 'jonny', number: '3', face:'♥'},
+    {displayName: 'jane', number: '5', face:'♥'},
+    {displayName: 'jonnys', number: '3', face:'♥'},
+    {displayName: 'janes', number: '5', face:'♥'},
+    {displayName: 'jonnya', number: '3', face:'♥'},
+  ];
+  return (
+    <div style={table}>
+      <OpponentCards data={data} width={width}/>
+      <PlayingCards cards={cards} width={width}/>
+      <PlayerCards cards={cards} width={width}/>
     </div>
-  <div className="centered" style={bottom}>
-    <div className="centered" style={actions}>
-    </div>
-    <div className="centered" style={mostRecentCard}>
-      <Card width={5 * width}/>
-      <Card width={5 * width}/>
-      <Card width={5 * width}/>
-      <Card width={5 * width}/>
-      <Card width={5 * width}/>
-    </div>
-    <div className="centered" style={actions}>
-    </div>
-  </div>
-  <div className="centered" style={bottom}>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-    <Card width={4 * width} isClickable/>
-  </div>
-</div>)
+  );
 };
 
 export default Home;
