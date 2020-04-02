@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+
+import { StoreContext } from 'util/store';
 
 const StyledDiv = styled.div`
   .btn {
@@ -15,12 +17,20 @@ const StyledDiv = styled.div`
   };
 `;
 
-const Action = ({ color, width=1, clickHandler, text, active }) => (
-    <StyledDiv width={width} className="centered" onClick={clickHandler} color={color}>
-      <div className="centered btn">
-        {text}
-      </div>
-    </StyledDiv>
-);
+const Action = ({ color, clickHandler, text, active }) => {
+const { globalWidth } =  useContext(StoreContext);
+  return (
+      <StyledDiv 
+        activate={active} 
+        width={globalWidth[0]} 
+        className="centered" 
+        onClick={clickHandler} 
+        color={color}>
+        <div className="centered btn">
+          {text}
+        </div>
+      </StyledDiv>
+  )
+};
 
 export default Action;

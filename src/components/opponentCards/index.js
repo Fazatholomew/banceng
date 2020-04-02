@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import Card from 'components/card';
+import { StoreContext } from 'util/store';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -32,10 +33,11 @@ const StyledDiv = styled.div`
 `;
 
 const OpponentCards = ({ data=[], width=1 }) => {
+  const { globalWidth } =  useContext(StoreContext);
   const player = data.length;
   const renderPlayer = data.map((player) => (
     <div key={player.name} className="centered column">
-      <Card width={7 * width}/>
+      <Card width={7 * globalWidth[0]}/>
       <div className='name' data-left={player.cardLeft}>
         {player.name}
       </div>
@@ -43,7 +45,7 @@ const OpponentCards = ({ data=[], width=1 }) => {
   ));
 
   return (
-    <StyledDiv player={player - 1} width={width}>
+    <StyledDiv player={player - 1} width={globalWidth[0]}>
       {renderPlayer}
     </StyledDiv>
   )

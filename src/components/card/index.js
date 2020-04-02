@@ -51,7 +51,6 @@ const Card = ({ width , isClickable, isShown, face, number}) => {
     // toggle isSelected state
     setSelected(!isSelected)
   }
-
   if (isShown) {
     return (
       <StyledDiv width={width} isSelected={isSelected} isClickable={isClickable} onClick={isClickable ? onPressHandle : null}>

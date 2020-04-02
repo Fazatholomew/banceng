@@ -13,12 +13,6 @@ const table = {
   flexDirection: 'column'
 };
 
-let width = 1;
-
-if (window.innerWidth < 900) {
-  width = window.innerWidth / 1700
-}
-
 const Home = () => {
   const data = [
     {name: 'Byandika! @Boss', cardLeft: 13},
@@ -35,9 +29,9 @@ const Home = () => {
   ];
   return (
     <div style={table}>
-      <OpponentCards data={data} width={width}/>
-      <PlayingCards cards={cards} width={width}/>
-      <PlayerCards cards={cards} width={width}/>
+      <OpponentCards data={data}/>
+      <PlayingCards cards={cards}/>
+      <PlayerCards cards={cards}/>
     </div>
   );
 };

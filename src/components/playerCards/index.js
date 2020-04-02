@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 
 import Card from 'components/card';
+import { StoreContext } from 'util/store';
 
-const playerCards = ({ cards=[], width=1 }) => {
+const PlayerCards = ({ cards=[] }) => {
+  const { globalWidth } =  useContext(StoreContext);
   const renderCard = cards.map((card) => (
     <Card 
       key={card.displayName} 
       isShown
       isClickable
-      width={4 * width} 
+      width={4 * globalWidth[0]} 
       face={card.face} 
       number={card.number}
     />
@@ -21,4 +23,4 @@ const playerCards = ({ cards=[], width=1 }) => {
   )
 };
 
-export default playerCards;
+export default PlayerCards;
