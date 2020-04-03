@@ -1,10 +1,12 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
+
 import OpponentCards from './';
+import Store from 'util/store';
 
 describe('OpponentCards component render tests', () => {
   test('it renders', () => {
-    const wrapper = shallow(<OpponentCards />);
+    const wrapper = mount(<Store><OpponentCards /></Store>);
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -14,7 +16,7 @@ describe('OpponentCards component render tests', () => {
       {name: 'jane'},
       {name: 'doe'},
     ];
-    const wrapper = shallow(<OpponentCards data={data} width={1} />);
+    const wrapper = mount(<Store><OpponentCards data={data}/></Store>);
     expect(wrapper.find('.column')).toHaveLength(data.length);
   });
 
@@ -23,7 +25,7 @@ describe('OpponentCards component render tests', () => {
       {name: 'jonny'},
       {name: 'jane'},
     ];
-    const wrapper = mount(<OpponentCards data={data} width={1} />);
+    const wrapper = mount(<Store><OpponentCards data={data}/></Store>);
     expect(wrapper.find('img')).toHaveLength(2);
   })
 });

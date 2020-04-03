@@ -32,20 +32,20 @@ const StyledDiv = styled.div`
  };
 `;
 
-const OpponentCards = ({ data=[], width=1 }) => {
+const OpponentCards = ({ data=[] }) => {
   const { globalWidth } =  useContext(StoreContext);
   const player = data.length;
   const renderPlayer = data.map((player) => (
     <div key={player.name} className="centered column">
       <Card width={7 * globalWidth[0]}/>
-      <div className='name' data-left={player.cardLeft}>
+      <div className='name' data-left={player.getCards().length}>
         {player.name}
       </div>
     </div>
   ));
 
   return (
-    <StyledDiv player={player - 1} width={globalWidth[0]}>
+    <StyledDiv player={player} width={globalWidth[0]}>
       {renderPlayer}
     </StyledDiv>
   )

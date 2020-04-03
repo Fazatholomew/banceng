@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
     height: 3em;
     border-radius: 10em;
   };
-  &:hover{
+  .btn:hover{
     cursor: ${props => props.activate ? 'pointer' : 'default'};
   };
 `;

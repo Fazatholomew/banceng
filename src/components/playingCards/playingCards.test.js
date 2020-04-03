@@ -1,10 +1,11 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import PlayingCards from './';
+import Store from 'util/store';
 
 describe('PlayingCards component render tests', () => {
   test('it renders', () => {
-    const wrapper = shallow(<PlayingCards />);
+    const wrapper = mount(<Store><PlayingCards /></Store>);
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -13,7 +14,7 @@ describe('PlayingCards component render tests', () => {
       {displayName: 'jonny', number: '3', face:'♥'},
       {displayName: 'jane', number: '5', face:'♥'},
     ];
-    const wrapper = mount(<PlayingCards cards={cards} width={1} />);
+    const wrapper = mount(<Store><PlayingCards cards={cards} /></Store>);
     expect(wrapper.find('.cardNumber')).toHaveLength(cards.length);
   });
 
@@ -22,8 +23,8 @@ describe('PlayingCards component render tests', () => {
       {displayName: 'jonny', number: '3', face:'♥'},
       {displayName: 'jane', number: '5', face:'♥'},
     ];
-    const wrapper = mount(<PlayingCards cards={cards} width={1} />);
-    const card = shallow(wrapper.find('.cardNumber').get(0))
+    const wrapper = mount(<Store><PlayingCards cards={cards} /></Store>);
+    const card = mount(wrapper.find('.cardNumber').get(0))
     expect(card.text()).toEqual('3')
   })
 
@@ -32,9 +33,9 @@ describe('PlayingCards component render tests', () => {
       {displayName: 'jonny', number: '3', face:'♥'},
       {displayName: 'jane', number: '5', face:'♥'},
     ];
-    const wrapper = mount(<PlayingCards cards={cards} width={1} />);
-    const cuss = shallow(wrapper.find('.btn').get(0))
-    const lawan = shallow(wrapper.find('.btn').get(1))
+    const wrapper = mount(<Store><PlayingCards cards={cards} /></Store>);
+    const cuss = mount(wrapper.find('.btn').get(0))
+    const lawan = mount(wrapper.find('.btn').get(1))
     expect(cuss.text()).toEqual('Cuss')
     expect(lawan.text()).toEqual('Lawan')
   })

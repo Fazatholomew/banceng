@@ -2,17 +2,33 @@ import React, { useContext } from 'react';
 
 import Card from 'components/card';
 import { StoreContext } from 'util/store';
+import { compare } from 'util/engine/engine';
 
 const PlayerCards = ({ cards=[] }) => {
-  const { globalWidth } =  useContext(StoreContext);
-  const renderCard = cards.map((card) => (
+  const globalStore = useContext(StoreContext);
+  const { globalWidth } =  globalStore
+  const { playingCardState } = globalStore.playingCard;
+  const { selectedCardState, selectedCardReducer } = globalStore.selectedCard;
+  const { setIsPlayable } = globalStore.isPlayable;
+
+  const selectCard = (isSelected, cardObj) => {
+    if (isSelected) {
+      selectedCardReducer('remove', [cardObj]);
+      setIsPlayable(compare(playingCardState, selectedCardState));
+    } else {
+      selectedCardReducer('add', [cardObj]);
+      setIsPlayable(compare(playingCardState, selectedCardState));
+    }
+  }
+
+  const renderCard = cards.map((card, i) => (
     <Card 
       key={card.displayName} 
       isShown
       isClickable
-      width={4 * globalWidth[0]} 
-      face={card.face} 
-      number={card.number}
+      width={4 * globalWidth[0]}
+      clickHandler={selectCard}
+      cardObj={card}
     />
   ));
 
