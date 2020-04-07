@@ -6,9 +6,10 @@ export const StoreContext = createContext(null);
 export default ({ children }) => {
   const [globalWidthState, setGlobalWidth] = useState(1);
   const [isPlayingState, setPlaying] = useState(false);
-  const [playingCardState, setPlayingCard] = useState(new CardSequence());
+  const [playingCardState, _setPlayingCard] = useState(new CardSequence());
   const [selectedCardState, setSelectedCard] = useState(new CardSequence());
   const [isPlayableState, setIsPlayable] = useState(false);
+  const [roomState, setRoom] = useState({});
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -32,12 +33,19 @@ export default ({ children }) => {
     }
   }
 
+  const setPlayingCard = (cards) => {
+    const newCards = new CardSequence();
+    newCards.addCards(cards);
+    _setPlayingCard(newCards);
+  }
+
   const store = {
     globalWidth: [globalWidthState, setGlobalWidth],
     isPlaying: [isPlayingState, setPlaying],
     isPlayable: {isPlayableState, setIsPlayable},
     playingCard: {playingCardState, setPlayingCard},
-    selectedCard: {selectedCardState, selectedCardReducer}
+    selectedCard: {selectedCardState, selectedCardReducer},
+    room: {roomState, setRoom},
   };
   return (
     <StoreContext.Provider value={store}>

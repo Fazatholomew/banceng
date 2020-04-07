@@ -1,0 +1,16 @@
+gameState = {
+  players: [
+    {
+      userId,
+      name,
+      cards,
+      score
+    }
+
+  ],
+  playingCards: [
+  ],
+  currentTurn: userId,
+  game: 0,
+  round: 0,
+}

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Login from './components/login';
-import Home from './components/home';
+import Room from 'container/room';
 import { StoreContext } from 'util/store';
 
 const App = () => {
@@ -17,8 +17,8 @@ const App = () => {
   });
   return (
     <Switch>
-      <Route path="/" component={Home} exact/>
       <Route path="/login" component={Login} exact/>
+      <Route path="/room/:roomId" component={Room}/>
     </Switch>
   )
 };

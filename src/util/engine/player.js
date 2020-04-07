@@ -5,6 +5,7 @@ export class Player {
   constructor(name) {
     this.name = name;
     this.cards = new CardSequence();
+    this.score = 0;
   }
 
   addCards(names) {
