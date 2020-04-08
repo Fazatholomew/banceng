@@ -36,10 +36,10 @@ const OpponentCards = ({ data=[] }) => {
   const { globalWidth } =  useContext(StoreContext);
   const player = data.length;
   const renderPlayer = data.map((player) => (
-    <div key={player.name} className="centered column">
+    <div key={player.userId} className="centered column">
       <Card width={7 * globalWidth[0]}/>
-      <div className='name' data-left={player.getCards().length}>
-        {player.name}
+      <div className='name' data-left={player.cards}>
+        {player.userId}
       </div>
     </div>
   ));
@@ -52,3 +52,5 @@ const OpponentCards = ({ data=[] }) => {
 };
 
 export default OpponentCards;
+
+// supposed to be name not userId temporary

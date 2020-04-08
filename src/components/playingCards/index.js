@@ -5,7 +5,7 @@ import Action from './actionButton';
 import { StoreContext } from 'util/store';
 
 
-const PlayingCards = ({ kocokHandler }) => {
+const PlayingCards = ({ kocokHandler, lawanHandler }) => {
   const globalStore = useContext(StoreContext);
   const { globalWidth } =  globalStore;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
@@ -13,9 +13,9 @@ const PlayingCards = ({ kocokHandler }) => {
   const { selectedCardState, selectedCardReducer } = globalStore.selectedCard;
   const { isPlayableState } = globalStore.isPlayable;
 
-  const lawanHandler = () => {
+  const _lawanHandler = () => {
     //send selected Card to server
-    setPlayingCard(selectedCardState);
+    lawanHandler(selectedCardState);
     selectedCardReducer('reset');
   };
 
@@ -41,7 +41,7 @@ const PlayingCards = ({ kocokHandler }) => {
           <Action
             active={isPlayableState} 
             text="Lawan"
-            clickHandler={isPlayableState ? lawanHandler : null} 
+            clickHandler={isPlayableState ? _lawanHandler : null} 
             color={isPlayableState ? '#d91e18' : '#96281b'}/>) : (
           <Action 
             active 
