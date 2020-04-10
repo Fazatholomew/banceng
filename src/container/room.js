@@ -21,7 +21,6 @@ const table = {
 };
 
 const ENDPOINT = 'localhost:8080';
-const userId = Date.now();
 let socket;
 
 const Room = () => {
@@ -33,7 +32,8 @@ const Room = () => {
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
   const [playingCards, setPlayingCards] = useState([])
-  let { roomId } = useParams();
+  const { roomId } = useParams();
+  const { userId } = globalStore.userInfo;
 
   const setUserCards = (displayNames) => {
     const cards = new CardSequence();
@@ -43,10 +43,8 @@ const Room = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    if (roomId === 'new') {
-      roomId = '';
-    }
-    socket.emit('enterRoom', { roomId, userId }, ({error}) => {
+    const payload = JSON.stringify({ roomId, userId });
+    socket.emit('room', JSON.stringify({ type: 'ENTER ROOM',  payload}), ({error}) => {
       if(error) {
         console.log(error);
       }
@@ -86,14 +84,15 @@ const Room = () => {
       const bufferPlayersIds = [...opponents, {userId}];
       const players = bufferPlayersIds.map((id) => new Player(id.userId));
       bagiin(players, deck);
-      const payload = {};
+      const cards = {};
       players.forEach((player) => {
-        const cards = {};
-        player.getCards().forEach((element) => {cards[element.displayName] = 1;});
-        payload[player.name] = cards;
+        const playerCards = {};
+        player.getCards().forEach((element) => {playerCards[element.displayName] = 1;});
+        cards[player.name] = playerCards;
         // supposed to be id but name is used for now
       });
-      socket.emit('startGame', JSON.stringify({ roomId, payload }), ({error}) => {
+      const payload = JSON.stringify({ cards, roomId })
+      socket.emit('room', JSON.stringify({ type: 'START GAME', payload }), ({error}) => {
         console.log(error);
       });
     }

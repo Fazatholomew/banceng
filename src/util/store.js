@@ -10,6 +10,7 @@ export default ({ children }) => {
   const [selectedCardState, setSelectedCard] = useState(new CardSequence());
   const [isPlayableState, setIsPlayable] = useState(false);
   const [roomState, setRoom] = useState({});
+  const [userId, setUserId] = useState(Date.now());
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -46,6 +47,7 @@ export default ({ children }) => {
     playingCard: {playingCardState, setPlayingCard},
     selectedCard: {selectedCardState, selectedCardReducer},
     room: {roomState, setRoom},
+    userInfo: {userId, setUserId}
   };
   return (
     <StoreContext.Provider value={store}>
