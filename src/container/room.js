@@ -20,7 +20,7 @@ const table = {
   flexDirection: 'column'
 };
 
-const ENDPOINT = 'localhost:8080';
+const ENDPOINT = 'http://localhost:8080';
 let socket;
 
 const Room = () => {
@@ -31,7 +31,7 @@ const Room = () => {
   const {roomState, setRoom} = globalStore.room;
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
-  const [playingCards, setPlayingCards] = useState([])
+  const { playingCardState, setPlayingCard } = globalStore.playingCard;
   const { roomId } = useParams();
   const { userId } = globalStore.userInfo;
 
@@ -43,14 +43,16 @@ const Room = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    const payload = JSON.stringify({ roomId, userId });
-    socket.emit('room', JSON.stringify({ type: 'ENTER ROOM',  payload}), ({error}) => {
+    console.log("connecting socket....");
+    socket.emit('room', JSON.stringify({ type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
       if(error) {
         console.log(error);
       }
     });
-    return () => { socket.emit('leaveRoom', { roomId, userId });};
-  }, []);
+    return () => { 
+      console.log('leaving...')
+      socket.emit('leaveRoom', { roomId, userId });};
+  }, [roomId, userId]);
 
   useEffect(() => {
     socket.on('update', (payload) => {
@@ -68,9 +70,10 @@ const Room = () => {
         name: user.name,
         cards: user.cards.length, 
         isTurning: currentTurn === user.userId})));
-      setPlayingCards(playingCards);
+      setPlayingCard(playingCards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
+      console.log()
     });
   }, []);
 
@@ -78,7 +81,7 @@ const Room = () => {
   
   const kocokHandler = () => {
     //Initiate game by creating deck, shuffle, and bagi the shuffled deck
-    if(!isPlayingState && playingCards.length === 0 && opponents.length > 0) {
+    if(!isPlayingState && playingCardState.length === 0 && opponents.length > 0) {
       const deck = new Deck();
       deck.kocok();
       const bufferPlayersIds = [...opponents, {userId}];
@@ -91,8 +94,7 @@ const Room = () => {
         cards[player.name] = playerCards;
         // supposed to be id but name is used for now
       });
-      const payload = JSON.stringify({ cards, roomId })
-      socket.emit('room', JSON.stringify({ type: 'START GAME', payload }), ({error}) => {
+      socket.emit('room', JSON.stringify({ type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
         console.log(error);
       });
     }
@@ -101,11 +103,11 @@ const Room = () => {
   const lawanHandler = (cards) => {
     // next turn with given cards sequence
     // send cards to server
+    console.log('lawan', cards);
     const displayNames = cards.cards.map((card) => card.displayName);
-    socket.emit('lawan', JSON.stringify({
-      roomId,
-      userId,
-      payload: displayNames
+    socket.emit('room', JSON.stringify({
+      type: 'LAWAN',
+      payload: { cards: displayNames, roomId, userId }
     }), ({error}) => {
       console.log(error);
     });
@@ -115,7 +117,6 @@ const Room = () => {
     <div style={table}>
       <OpponentCards data={opponents}/>
       <PlayingCards 
-        cards={playingCards} 
         kocokHandler={kocokHandler}
         lawanHandler={lawanHandler}
       />

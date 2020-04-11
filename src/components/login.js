@@ -31,8 +31,8 @@ const Login = () => {
   return (
   <div>
     <h1>Hello World!</h1>
-    <Form.Control onChange={(e) => console.log(e)} />
-    <Button variant='dark' onClick={handleSubmit}/>
+    <Form.Control onChange={(e) => setRoom(e.target.value)} placeholder="Room ID. (Leave blank to create a new room" />
+    <Button variant='dark' onClick={handleSubmit}>Enter Room</Button>
   </div>
   )
 };

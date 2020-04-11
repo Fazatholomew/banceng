@@ -18,6 +18,9 @@ const StyledDiv = styled.div`
     font-size: ${props => 2 * props.width}em;
     margin-top: 0.2em;
   };
+  .isTurning{
+    text-shadow: -1px 0 yellow, 0 1px yellow, 1px 0 black, 0 -1px yellow;
+  }
   .name[data-left]:after {
     content: attr(data-left);
     position: absolute;
@@ -34,18 +37,18 @@ const StyledDiv = styled.div`
 
 const OpponentCards = ({ data=[] }) => {
   const { globalWidth } =  useContext(StoreContext);
-  const player = data.length;
+  const players = data.length;
   const renderPlayer = data.map((player) => (
     <div key={player.userId} className="centered column">
       <Card width={7 * globalWidth[0]}/>
-      <div className='name' data-left={player.cards}>
+      <div className={`name ${player.isTurning ? 'isTurning' : null}`} data-left={player.cards}>
         {player.userId}
       </div>
     </div>
   ));
 
   return (
-    <StyledDiv player={player} width={globalWidth[0]}>
+    <StyledDiv player={players} width={globalWidth[0]}>
       {renderPlayer}
     </StyledDiv>
   )
