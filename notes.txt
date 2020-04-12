@@ -15,8 +15,5 @@ gameState = {
   round: 0,
 }
 
-Simplyfy room handlers into one function with switch statement based on events
-
-Create creating room eventHandler
-Create creating room route
-Create creating room page
+Figure out Cuss mechanism
+Figure out disconnect mechanism using keeping track of socket id

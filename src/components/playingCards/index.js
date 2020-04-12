@@ -5,7 +5,7 @@ import Action from './actionButton';
 import { StoreContext } from 'util/store';
 
 
-const PlayingCards = ({ kocokHandler, lawanHandler }) => {
+const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler }) => {
   const globalStore = useContext(StoreContext);
   const { globalWidth } =  globalStore;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
@@ -31,7 +31,11 @@ const PlayingCards = ({ kocokHandler, lawanHandler }) => {
   return (
     <div style={{height: '33%'}} className="centered">
       <div style={{width: '25%'}}  className="centered">
-        {isPlayingState ? <Action active text="Cuss" color='blue'/> : null}
+        {isPlayingState ? <Action 
+          active 
+          text="Cuss"
+          clickHandler={cussHandler}
+          color='blue'/> : null}
       </div>
       <div style={{width: '50%'}}  className="centered">
         {renderCard}

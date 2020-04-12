@@ -22,6 +22,7 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })
       };
+      console.log('asking for new room');
       const response = await fetch('http://localhost:8080/room', requestOptions)
       const data = await response.json();
       history.push(`/room/${data.roomId}`);

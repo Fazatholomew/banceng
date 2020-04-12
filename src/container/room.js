@@ -52,7 +52,7 @@ const Room = () => {
     return () => { 
       console.log('leaving...')
       socket.emit('leaveRoom', { roomId, userId });};
-  }, [roomId, userId]);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     socket.on('update', (payload) => {
@@ -65,6 +65,7 @@ const Room = () => {
       const { players, playingCards, currentTurn, game, round } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
       const rawUser = players.filter((user) => user.userId === userId)[0];
+
       setOpponents(rawOpponent.map((user) => ({
         userId: user.userId,
         name: user.name,
@@ -73,11 +74,9 @@ const Room = () => {
       setPlayingCard(playingCards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
-      console.log()
     });
-  }, []);
+  }, []); // eslint-disable-line
 
-  
   
   const kocokHandler = () => {
     //Initiate game by creating deck, shuffle, and bagi the shuffled deck
@@ -111,7 +110,16 @@ const Room = () => {
     }), ({error}) => {
       console.log(error);
     });
-  }
+  };
+
+  const cussHandler = () => {
+    socket.emit('room', JSON.stringify({
+      type: 'CUSS',
+      payload: { roomId, userId }
+    }), ({error}) => {
+      console.log(error);
+    });
+  };
   
   return (
     <div style={table}>
@@ -119,6 +127,7 @@ const Room = () => {
       <PlayingCards 
         kocokHandler={kocokHandler}
         lawanHandler={lawanHandler}
+        cussHandler={cussHandler}
       />
       <PlayerCards cards={userCards}/>
     </div>

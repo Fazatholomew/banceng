@@ -10,7 +10,7 @@ export default ({ children }) => {
   const [selectedCardState, setSelectedCard] = useState(new CardSequence());
   const [isPlayableState, setIsPlayable] = useState(false);
   const [roomState, setRoom] = useState({});
-  const [userId, setUserId] = useState(Date.now());
+  const [userId, setUserId] = useState(Date.now().toString());
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;

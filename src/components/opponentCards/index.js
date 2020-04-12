@@ -20,7 +20,7 @@ const StyledDiv = styled.div`
   };
   .isTurning{
     text-shadow: -1px 0 yellow, 0 1px yellow, 1px 0 black, 0 -1px yellow;
-  }
+  };
   .name[data-left]:after {
     content: attr(data-left);
     position: absolute;
