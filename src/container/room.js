@@ -102,14 +102,24 @@ const Room = () => {
   const lawanHandler = (cards) => {
     // next turn with given cards sequence
     // send cards to server
-    console.log('lawan', cards);
-    const displayNames = cards.cards.map((card) => card.displayName);
-    socket.emit('room', JSON.stringify({
-      type: 'LAWAN',
-      payload: { cards: displayNames, roomId, userId }
-    }), ({error}) => {
-      console.log(error);
-    });
+    
+    if (cards.length === userCards.length) {
+      socket.emit('room', JSON.stringify({
+        type: 'NUTUP',
+        payload: { roomId, userId }
+      }), ({error}) => {
+        console.log(error);
+      });
+    } else {
+      console.log('lawan', cards);
+      const displayNames = cards.cards.map((card) => card.displayName);
+      socket.emit('room', JSON.stringify({
+        type: 'LAWAN',
+        payload: { cards: displayNames, roomId, userId }
+      }), ({error}) => {
+        console.log(error);
+      });
+    }
   };
 
   const cussHandler = () => {
