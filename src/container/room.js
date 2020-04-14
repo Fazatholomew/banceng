@@ -28,10 +28,6 @@ const buttons = {
   flexDirection: 'column'
 };
 
-const points = {
-  
-};
-
 const container = {
   display: 'flex',
   flexDirection: 'row',
@@ -49,6 +45,7 @@ const Room = () => {
   const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
   const {roomState, setRoom} = globalStore.room;
+  const { selectedCardReducer } = globalStore.selectedCard;
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
   const { playingCardState, setPlayingCard } = globalStore.playingCard;
@@ -91,10 +88,10 @@ const Room = () => {
       console.log(payloadParsed);
       console.log(room);
       const { gameState, isPlaying } = room;
-      const { players, playingCards, currentTurn, game, round } = gameState;
+      const { players, playingCards, currentTurn, game } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
       const rawUser = players.filter((user) => user.userId === userId)[0];
-
+      selectedCardReducer('reset');
       setOpponents(rawOpponent.map((user) => ({
         userId: user.userId,
         name: user.name,
@@ -103,7 +100,7 @@ const Room = () => {
       setPlayingCard(playingCards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
-      setRoom({...roomState, players, game});
+      setRoom({...roomState, players, game, isTurn: currentTurn === userId});
     });
   }, []); // eslint-disable-line
 
@@ -173,6 +170,7 @@ const Room = () => {
           kocokHandler={kocokHandler}
           lawanHandler={lawanHandler}
           cussHandler={cussHandler}
+          isTurn={roomState.isTurn}
         />
         <PlayerCards cards={userCards}/>
       </div>

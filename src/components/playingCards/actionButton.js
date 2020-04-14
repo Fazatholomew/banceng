@@ -24,7 +24,7 @@ const { globalWidth } =  useContext(StoreContext);
         activate={active} 
         width={globalWidth[0]} 
         className="centered" 
-        onClick={clickHandler} 
+        onClick={active ? clickHandler : null} 
         color={color}>
         <div className="centered btn">
           {text}

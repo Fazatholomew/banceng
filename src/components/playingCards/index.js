@@ -5,7 +5,7 @@ import Action from './actionButton';
 import { StoreContext } from 'util/store';
 
 
-const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler }) => {
+const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn }) => {
   const globalStore = useContext(StoreContext);
   const { globalWidth } =  globalStore;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
@@ -32,10 +32,11 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler }) => {
     <div style={{height: '33%'}} className="centered">
       <div style={{width: '25%'}}  className="centered">
         {isPlayingState ? <Action 
-          active 
+          active={isTurn && playingCardState.cards.length > 0}
           text="Cuss"
           clickHandler={cussHandler}
-          color='blue'/> : null}
+          color={isTurn && playingCardState.cards.length > 0 ? '#19b5fe' : '#013243'}
+          /> : null}
       </div>
       <div style={{width: '50%'}}  className="centered">
         {renderCard}
@@ -43,10 +44,10 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler }) => {
       <div style={{width: '25%'}}  className="centered">
         {isPlayingState ? (
           <Action
-            active={isPlayableState} 
+            active={isPlayableState && isTurn && selectedCardState.cards.length > 0} 
             text="Lawan"
-            clickHandler={isPlayableState ? _lawanHandler : null} 
-            color={isPlayableState ? '#d91e18' : '#96281b'}/>) : (
+            clickHandler={_lawanHandler} 
+            color={isPlayableState && isTurn && selectedCardState.cards.length > 0 ? '#d91e18' : '#96281b'}/>) : (
           <Action 
             active 
             text="Kocok" 

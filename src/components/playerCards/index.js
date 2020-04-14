@@ -10,14 +10,22 @@ const PlayerCards = ({ cards=[] }) => {
   const { playingCardState } = globalStore.playingCard;
   const { selectedCardState, selectedCardReducer } = globalStore.selectedCard;
   const { setIsPlayable } = globalStore.isPlayable;
+  const { roomState } = globalStore.room;
 
   const selectCard = (isSelected, cardObj) => {
+    let tigaTempe = true;
     if (isSelected) {
       selectedCardReducer('remove', [cardObj]);
-      setIsPlayable(compare(playingCardState, selectedCardState));
+      if (roomState.game === 0) {
+        tigaTempe = Boolean(selectedCardState.cardTable['3 Diamond']);
+      }
+      setIsPlayable(compare(playingCardState, selectedCardState) && tigaTempe);
     } else {
       selectedCardReducer('add', [cardObj]);
-      setIsPlayable(compare(playingCardState, selectedCardState));
+      if (roomState.game === 0) {
+        tigaTempe = Boolean(selectedCardState.cardTable['3 Diamond']);
+      }
+      setIsPlayable(compare(playingCardState, selectedCardState) && tigaTempe);
     }
   }
 

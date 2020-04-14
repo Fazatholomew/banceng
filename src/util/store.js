@@ -32,6 +32,7 @@ export default ({ children }) => {
       default:
         break;
     }
+    console.log(action, payload, selectedCardState)
   }
 
   const setPlayingCard = (cards) => {
