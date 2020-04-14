@@ -11,14 +11,33 @@ import { CardSequence } from 'util/engine/cardSequence';
 import OpponentCards from 'components/opponentCards';
 import PlayingCards from 'components/playingCards';
 import PlayerCards from 'components/playerCards';
+import Catet from 'components/catet';
 
 const table = {
   display: 'flex',
-  width: '55vw',
+  width: '75vw',
   height: '70vh',
   borderRadius: '15px',
   flexDirection: 'column'
 };
+
+const buttons = {
+  display: 'flex',
+  width: '5vw',
+  height: '70vh',
+  flexDirection: 'column'
+};
+
+const points = {
+  
+};
+
+const container = {
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100vw',
+  height: '100%'
+}
 
 const ENDPOINT = 'http://localhost:8080';
 let socket;
@@ -27,6 +46,7 @@ const Room = () => {
   // Main room for players come and play a game
   // Connection to server using socket goes here.
   const globalStore = useContext(StoreContext);
+  const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
   const {roomState, setRoom} = globalStore.room;
   const [userCards, _setUserCards] = useState([]);
@@ -40,6 +60,15 @@ const Room = () => {
     cards.addCards(displayNames);
     _setUserCards(cards.cards);
   }
+
+  const changeWidth = () => {
+    if (window.innerWidth < 900 * globalWidthState) {
+      setGlobalWidth(window.innerWidth / 1700);
+    }
+  };
+  useEffect(() => {
+    changeWidth();
+  }, [window.innerWidth]);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -74,6 +103,7 @@ const Room = () => {
       setPlayingCard(playingCards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
+      setRoom({...roomState, players, game});
     });
   }, []); // eslint-disable-line
 
@@ -132,14 +162,21 @@ const Room = () => {
   };
   
   return (
-    <div style={table}>
-      <OpponentCards data={opponents}/>
-      <PlayingCards 
-        kocokHandler={kocokHandler}
-        lawanHandler={lawanHandler}
-        cussHandler={cussHandler}
-      />
-      <PlayerCards cards={userCards}/>
+    <div style={container}>
+      <div style={buttons}>
+        <div>Home</div>
+        <div>Profile</div>
+      </div>
+      <div style={table}>
+        <OpponentCards data={opponents}/>
+        <PlayingCards 
+          kocokHandler={kocokHandler}
+          lawanHandler={lawanHandler}
+          cussHandler={cussHandler}
+        />
+        <PlayerCards cards={userCards}/>
+      </div>
+      <Catet players={roomState.players} game={roomState.game}/>
     </div>
   );
 };

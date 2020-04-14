@@ -46,7 +46,7 @@ export const compare = (table, hand) => {
               if (tableCards.includes('2') || handCards.includes('2')) {
                 return tableCards.includes('2');
               }
-              return handCards[4].value > tableCards[4].value;
+              return hand.cards[4].value > table.cards[4].value;
 
             case 'flush':
               if (table.cards[0].face === hand.cards[0].face) {
@@ -60,17 +60,17 @@ export const compare = (table, hand) => {
               if (tableHigh === '2' || handHigh === '2') {
                 return tableHigh === '2';
               }
-              return handHigh > tableHigh;
+              return numberValues[handHigh] > numberValues[tableHigh];
 
             case 'bomb':
-              return handHigh > tableHigh;
+              return numberValues[handHigh] > numberValues[tableHigh];
 
             case 'straighflush':
               if (table.cards[0].face === hand.cards[0].face) {
                 if (tableCards.includes('2') || handCards.includes('2')) {
                   return tableCards.includes('2');
                 }
-                return handCards[4] > tableCards[4];
+                return numberValues[handCards[4]] > numberValues[tableCards[4]];
               }
               return facesRange[hand.cards[0].face] > facesRange[table.cards[0].face];
 

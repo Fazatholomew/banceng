@@ -15,7 +15,7 @@ const App = () => {
   };
   useEffect(() => {
     changeWidth();
-  });
+  }, [window.innerWidth]);
   return (
     <Switch>
       <Route path="/login" component={Login} exact/>
