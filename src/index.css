@@ -1,21 +1,30 @@
-/* * {
-  border: 1px dotted black;
-} */
-
 @font-face {
   font-family: Pokerface;
   src: url('./assets/fonts/Poker.woff') format('woff');
 }
 
+@font-face {
+  font-family: customFont;
+  src: url('./assets/fonts/custom.ttf') format('truetype');
+}
+
 body {
-  width: 100%;
+  width: 100vw;
   display: flex;
+  align-items: center;
   justify-content: center;
   font-family: 'Contrail One', cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('./assets/images/woodgrain-large.jpg');
-  background-size: cover;
-  padding-top: 30px;
+  background-image: url('./assets/images/background.png');
+  background-repeat: no-repeat;
+  background-size: 120%;
   margin: 0 auto !important;
+  height: 100vh;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
