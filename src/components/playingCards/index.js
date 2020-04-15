@@ -5,7 +5,7 @@ import Action from './actionButton';
 import { StoreContext } from 'util/store';
 
 
-const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn }) => {
+const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn, opponentTotal }) => {
   const globalStore = useContext(StoreContext);
   const { globalWidth } =  globalStore;
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
@@ -27,15 +27,17 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn }) => {
       cardObj={card}
     />
   ));
+  console.log(isPlayableState, isTurn, selectedCardState.length > 0, isPlayableState && isTurn && selectedCardState.cards.length > 0);
+
   
   return (
     <div style={{height: '33%'}} className="centered">
       <div style={{width: '25%'}}  className="centered">
         {isPlayingState ? <Action 
-          active={isTurn && playingCardState.cards.length > 0}
+          active={isTurn && playingCardState.length > 0}
           text="Cuss"
           clickHandler={cussHandler}
-          color={isTurn && playingCardState.cards.length > 0 ? '#19b5fe' : '#013243'}
+          color={ isTurn && playingCardState.length > 0 ? '#19b5fe' : '#013243'}
           /> : null}
       </div>
       <div style={{width: '50%'}}  className="centered">
@@ -44,15 +46,15 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn }) => {
       <div style={{width: '25%'}}  className="centered">
         {isPlayingState ? (
           <Action
-            active={isPlayableState && isTurn && selectedCardState.cards.length > 0} 
+            active={isPlayableState && isTurn && selectedCardState.length > 0} 
             text="Lawan"
             clickHandler={_lawanHandler} 
-            color={isPlayableState && isTurn && selectedCardState.cards.length > 0 ? '#d91e18' : '#96281b'}/>) : (
+            color={isPlayableState && isTurn && selectedCardState.length > 0 ? "#f03434" : "#96281b"}/>) : (
           <Action 
-            active 
+            active={opponentTotal > 0} 
             text="Kocok" 
             clickHandler={kocokHandler} 
-            color="#d91e18"/>)}
+            color={opponentTotal > 0 ? "#f03434" : "#96281b"}/>)}
       </div>
     </div>
   )

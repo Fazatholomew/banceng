@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
 import { StoreContext } from 'util/store';
 import { Deck } from 'util/engine/deck';
@@ -13,27 +13,12 @@ import PlayingCards from 'components/playingCards';
 import PlayerCards from 'components/playerCards';
 import Catet from 'components/catet';
 
-const table = {
-  display: 'flex',
-  width: '75vw',
-  height: '70vh',
-  borderRadius: '15px',
-  flexDirection: 'column'
-};
-
-const buttons = {
-  display: 'flex',
-  width: '5vw',
-  height: '70vh',
-  flexDirection: 'column'
-};
-
 const container = {
   display: 'flex',
-  flexDirection: 'row',
-  width: '100vw',
+  flexDirection: 'column',
+  width: '100%',
   height: '100%'
-}
+};
 
 const ENDPOINT = 'http://localhost:8080';
 let socket;
@@ -88,7 +73,7 @@ const Room = () => {
       console.log(payloadParsed);
       console.log(room);
       const { gameState, isPlaying } = room;
-      const { players, playingCards, currentTurn, game } = gameState;
+      const { players, playingCards, currentTurn, game, round } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
       const rawUser = players.filter((user) => user.userId === userId)[0];
       selectedCardReducer('reset');
@@ -100,7 +85,7 @@ const Room = () => {
       setPlayingCard(playingCards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
-      setRoom({...roomState, players, game, isTurn: currentTurn === userId});
+      setRoom({...roomState, players, game, isTurn: currentTurn === userId, round});
     });
   }, []); // eslint-disable-line
 
@@ -160,23 +145,19 @@ const Room = () => {
   
   return (
     <div style={container}>
-      <div style={buttons}>
-        <div>Home</div>
-        <div>Profile</div>
-      </div>
-      <div style={table}>
-        <OpponentCards data={opponents}/>
-        <PlayingCards 
-          kocokHandler={kocokHandler}
-          lawanHandler={lawanHandler}
-          cussHandler={cussHandler}
-          isTurn={roomState.isTurn}
-        />
-        <PlayerCards cards={userCards}/>
-      </div>
-      <Catet players={roomState.players} game={roomState.game}/>
+      <OpponentCards data={opponents}/>
+      <PlayingCards 
+        kocokHandler={kocokHandler}
+        lawanHandler={lawanHandler}
+        cussHandler={cussHandler}
+        isTurn={roomState.isTurn}
+        opponentTotal={opponents.length}
+      />
+      <PlayerCards cards={userCards}/>
     </div>
   );
 };
 
 export default Room;
+
+// <Catet players={roomState.players} game={roomState.game}/>

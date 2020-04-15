@@ -15,7 +15,4 @@ gameState = {
   round: 0,
 }
 
-Figure out Cuss mechanism
 Figure out disconnect mechanism using keeping track of socket id
-
-bomb versus bomb problem: fix compare function by comparing actual value not the numbers

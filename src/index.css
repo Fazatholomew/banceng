@@ -3,6 +3,11 @@
   src: url('./assets/fonts/Poker.woff') format('woff');
 }
 
+@font-face {
+  font-family: customFont;
+  src: url('./assets/fonts/custom.ttf') format('truetype');
+}
+
 body {
   width: 100vw;
   display: flex;

@@ -11,6 +11,7 @@ export default ({ children }) => {
   const [isPlayableState, setIsPlayable] = useState(false);
   const [roomState, setRoom] = useState({});
   const [userId, setUserId] = useState(Date.now().toString());
+  const [waitState, setWait] = useState(false);
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -32,7 +33,7 @@ export default ({ children }) => {
       default:
         break;
     }
-    console.log(action, payload, selectedCardState)
+    setWait(false);
   }
 
   const setPlayingCard = (cards) => {
@@ -48,7 +49,8 @@ export default ({ children }) => {
     playingCard: {playingCardState, setPlayingCard},
     selectedCard: {selectedCardState, selectedCardReducer},
     room: {roomState, setRoom},
-    userInfo: {userId, setUserId}
+    userInfo: {userId, setUserId},
+    wait: {waitState, setWait}
   };
   return (
     <StoreContext.Provider value={store}>
