@@ -15,4 +15,8 @@ gameState = {
   round: 0,
 }
 
+Create User database
+  login mechanism
+  token mechanism
+
 Figure out disconnect mechanism using keeping track of socket id

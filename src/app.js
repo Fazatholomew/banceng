@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Login from './components/login';
+import Login from 'container/login';
 import Room from 'container/room';
 import { StoreContext } from 'util/store';
 
@@ -69,7 +69,7 @@ const App = () => {
       </div>
       <div className='content'>
         <div className='title centered'>Banceng Mowal?</div>
-        <div className='page'>
+        <div className='page centered'>
           <Switch>
             <Route path="/login" component={Login} exact/>
             <Route path="/room/:roomId" component={Room}/>
