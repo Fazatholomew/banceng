@@ -1,13 +1,19 @@
+import { hash } from './auth';
+
 const url = 'http://localhost:8080/';
 
-export const auth = async ({ payload, token, type }) => {
+export const auth = async ({ userId, password, type }) => {
   // Wrapper function for fecthing user authentication
-  let headers = { 'Content-Type': 'application/json'};
-  if (token) headers['Authorization'] = 'Bearer ' + token;
-  const response = await fetch(url + 'auth/' + type, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(payload)
-  });
-  return response.json();
+  const hashed = hash(password);
+  try {
+    let headers = { 'Content-Type': 'application/json'};
+    const response = await fetch(url + 'auth/' + type, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({userId, password: hashed})
+    });
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -35,7 +35,8 @@ const Room = () => {
   const [opponents, setOpponents] = useState([]);
   const { playingCardState, setPlayingCard } = globalStore.playingCard;
   const { roomId } = useParams();
-  const { userId } = globalStore.userInfo;
+  const { userInfoState } = globalStore.userInfo;
+  const { userId, token } = userInfoState;
 
   const setUserCards = (displayNames) => {
     const cards = new CardSequence();
@@ -55,7 +56,7 @@ const Room = () => {
   useEffect(() => {
     socket = io(ENDPOINT);
     console.log("connecting socket....");
-    socket.emit('room', JSON.stringify({ type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
+    socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
       if(error) {
         console.log(error);
       }
@@ -105,7 +106,7 @@ const Room = () => {
         cards[player.name] = playerCards;
         // supposed to be id but name is used for now
       });
-      socket.emit('room', JSON.stringify({ type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
+      socket.emit('room', JSON.stringify({ token, type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
         console.log(error);
       });
     }
@@ -117,6 +118,7 @@ const Room = () => {
     
     if (cards.length === userCards.length) {
       socket.emit('room', JSON.stringify({
+        token,
         type: 'NUTUP',
         payload: { roomId, userId }
       }), ({error}) => {
@@ -126,6 +128,7 @@ const Room = () => {
       console.log('lawan', cards);
       const displayNames = cards.cards.map((card) => card.displayName);
       socket.emit('room', JSON.stringify({
+        token,
         type: 'LAWAN',
         payload: { cards: displayNames, roomId, userId }
       }), ({error}) => {
@@ -136,6 +139,7 @@ const Room = () => {
 
   const cussHandler = () => {
     socket.emit('room', JSON.stringify({
+      token,
       type: 'CUSS',
       payload: { roomId, userId }
     }), ({error}) => {

@@ -81,7 +81,7 @@ const StyledDiv = styled.div`
  };
 `;
 
-const Login = () => {
+const Signup = () => {
   // Main room for players come and play a game
   // Connection to server using socket goes here.
   const globalStore = useContext(StoreContext);
@@ -90,40 +90,60 @@ const Login = () => {
   const [ info, setInfo ] = useState({});
   const [ dataBuffer, setDataBuffer ] = useState('');
   const [ current, setCurrent ] = useState(0);
+  const [ failed, setFailed ] = useState(false);
   const [ failedMsg, setFailedMsg ] = useState('');
-  const [ title, setTitle ] = useState('Masuk');
+  const [ title, setTitle ] = useState('Daftar')
   const history = useHistory();
 
   const handleSubmit = async (name) => {
     if (dataBuffer.length > 0) {
-      if (current < 1) {
+      if (current < 2) {
+        if (current === 0) {
+          if (dataBuffer.includes(" ")) {
+            setFailed(true);
+            setFailedMsg('JANGAN ADA SPASI!');
+          }
+        }
         const newData = { ...info };
         newData[name.toLowerCase()] = dataBuffer;
         setInfo(newData);
         setCurrent(current + 1);
         setDataBuffer('');
-        setTitle('Masuk');
+        setTitle('Daftar');
       } else {
-        const hasil = await auth({ userId: info.userid, password: dataBuffer, type: 'login' })
-        if (hasil.status === 403) {
-          setTitle('Password atau email salah.');
-          setCurrent(0);
-          setDataBuffer(info.userid);
-        } else if (hasil.status === 500) {
-          setTitle('Ada error coba lagi.');
-          setCurrent(0);
-          setDataBuffer(info.userid);
-        } else {
-          try {
-            const { token } = await hasil.json();
-            setUserInfo(token);
-            history.push(`/room/`);
-          } catch (err) {
-            setTitle('Ada error coba lagi.');
+        if (!failed) {
+          if (info.password === dataBuffer && !failed) {
+            const hasil = await auth({ userId: info.userid, password: info.password, type: 'signup' })
+            if (hasil.status === 406) {
+              setTitle('Udah ada yang punya.');
+              setCurrent(0);
+              setDataBuffer(info.userid);
+            } else if (hasil.status === 500) {
+              setTitle('Ada error coba lagi.');
+              setCurrent(0);
+              setDataBuffer(info.userid);
+            } else {
+              try {
+                const { token } = await hasil.json();
+                setUserInfo(token);
+                history.push(`/room/`);
+              } catch (err) {
+                setTitle('Ada error coba lagi.');
+                setCurrent(0);
+                setDataBuffer(info.userid);
+                console.log(err)
+              }
+            }
+          } else {
+            setTitle('Password tidak sama.');
             setCurrent(0);
             setDataBuffer(info.userid);
-            console.log(err)
           }
+        } else {
+          setFailed(false);
+          setTitle(failedMsg);
+          setCurrent(0);
+          setDataBuffer(info.userid);
         }
       }
     } else {
@@ -145,6 +165,13 @@ const Login = () => {
       min: 0,
       max: 20,
       litleInfo: 'Jangan aneh-aneh. Kalau lupa gak bisa direset.' 
+    },
+    { 
+      name: 'Confirm Password', 
+      type: 'password',
+      min: 0,
+      max: 20,
+      litleInfo: 'Ulangin lagi.' 
     }
   ].map((field, i) => (
     <Fade in={i === current} unmountOnExit={true} key={field.name}>
@@ -176,4 +203,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

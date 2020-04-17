@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import jwt from 'jwt-decode'
 
 import { CardSequence } from 'util/engine/cardSequence';
 
@@ -10,8 +11,8 @@ export default ({ children }) => {
   const [selectedCardState, setSelectedCard] = useState(new CardSequence());
   const [isPlayableState, setIsPlayable] = useState(false);
   const [roomState, setRoom] = useState({});
-  const [userId, setUserId] = useState(Date.now().toString());
   const [waitState, setWait] = useState(false);
+  const [userInfoState, _setUserInfo] = useState({});
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -42,6 +43,17 @@ export default ({ children }) => {
     _setPlayingCard(newCards);
   }
 
+  const setUserInfo = (token) => {
+    if (token) {
+      const { userId } = jwt(token);
+      if (userId) {
+        _setUserInfo({ userId, token });
+      }
+    } else {
+      _setUserInfo({});
+    }
+  }
+
   const store = {
     globalWidth: [globalWidthState, setGlobalWidth],
     isPlaying: [isPlayingState, setPlaying],
@@ -49,7 +61,7 @@ export default ({ children }) => {
     playingCard: {playingCardState, setPlayingCard},
     selectedCard: {selectedCardState, selectedCardReducer},
     room: {roomState, setRoom},
-    userInfo: {userId, setUserId},
+    userInfo: {userInfoState, setUserInfo},
     wait: {waitState, setWait}
   };
   return (

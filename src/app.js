@@ -2,8 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Signup from 'container/signup';
 import Login from 'container/login';
 import Room from 'container/room';
+import Lobby from 'container/lobby';
+import { ProtectedRoute, AuthRoute } from 'components/customRoute';
 import { StoreContext } from 'util/store';
 
 
@@ -52,15 +55,34 @@ const StyledDiv = styled.div`
 `;
 
 const App = () => {
-  const [ globalWidthState, setGlobalWidth ] =  useContext(StoreContext).globalWidth;
+  const globalStore = useContext(StoreContext);
+  const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
+  const { userInfoState, setUserInfo } = globalStore.userInfo;
   const changeWidth = () => {
     if (window.innerWidth < 900 * globalWidthState) {
       setGlobalWidth(window.innerWidth / 1700);
     }
   };
+
   useEffect(() => {
     changeWidth();
   }, [window.innerWidth]);
+
+  useEffect(() => {
+    const savedInfo = localStorage.getItem('rahasiaKita');
+    if (savedInfo) {
+      const { token } = JSON.parse(savedInfo);
+      if (!userInfoState.token || userInfoState.token !== token) {
+        setUserInfo(token);
+      }
+    } else {
+      if (userInfoState.token) {
+        const token = JSON.stringify({ userId: userInfoState.userId, token: userInfoState.token })
+        localStorage.setItem('rahasiaKita', token);
+      }
+    }
+  }, [userInfoState]);
+
   return (
     <StyledDiv width={globalWidthState}>
       <div className='navbar'>
@@ -71,8 +93,10 @@ const App = () => {
         <div className='title centered'>Banceng Mowal?</div>
         <div className='page centered'>
           <Switch>
-            <Route path="/login" component={Login} exact/>
-            <Route path="/room/:roomId" component={Room}/>
+            <AuthRoute path="/signup" component={Signup} exact/>
+            <AuthRoute path="/login" component={Login} exact/>
+            <ProtectedRoute path="/room/" component={Lobby}/>
+            <ProtectedRoute path="/room/:roomId" component={Room}/>
           </Switch>
         </div>
         <div className='footer centered'>This is footer</div>
