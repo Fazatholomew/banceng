@@ -55,12 +55,13 @@ const Room = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    console.log("connecting socket....");
-    socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
-      if(error) {
-        console.log(error);
-      }
-    });
+      console.log("connecting socket....");
+      console.log(JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}));
+      socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
+        if(error) {
+          console.log(error);
+        }
+      });
     return () => { 
       console.log('leaving...')
       socket.emit('leaveRoom', { roomId, userId });};
@@ -82,8 +83,10 @@ const Room = () => {
         userId: user.userId,
         name: user.name,
         cards: user.cards.length, 
-        isTurning: currentTurn === user.userId})));
+        isTurning: currentTurn === user.userId
+      })));  
       setPlayingCard(playingCards);
+      console.log(rawUser.cards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
       setRoom({...roomState, players, game, isTurn: currentTurn === userId, round});

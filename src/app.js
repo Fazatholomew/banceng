@@ -95,7 +95,7 @@ const App = () => {
           <Switch>
             <AuthRoute path="/signup" component={Signup} exact/>
             <AuthRoute path="/login" component={Login} exact/>
-            <ProtectedRoute path="/room/" component={Lobby}/>
+            <ProtectedRoute path="/room/" component={Lobby} exact/>
             <ProtectedRoute path="/room/:roomId" component={Room}/>
           </Switch>
         </div>

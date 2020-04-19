@@ -11,6 +11,7 @@ export default ({ children }) => {
   const [selectedCardState, setSelectedCard] = useState(new CardSequence());
   const [isPlayableState, setIsPlayable] = useState(false);
   const [roomState, setRoom] = useState({});
+  const [globalWaitState, setGlobalWait] = useState(true);
   const [waitState, setWait] = useState(false);
   const [userInfoState, _setUserInfo] = useState({});
 
@@ -52,6 +53,7 @@ export default ({ children }) => {
     } else {
       _setUserInfo({});
     }
+    setGlobalWait(false);
   }
 
   const store = {
@@ -62,7 +64,8 @@ export default ({ children }) => {
     selectedCard: {selectedCardState, selectedCardReducer},
     room: {roomState, setRoom},
     userInfo: {userInfoState, setUserInfo},
-    wait: {waitState, setWait}
+    wait: {waitState, setWait},
+    globalWait: {globalWaitState, setGlobalWait}
   };
   return (
     <StoreContext.Provider value={store}>

@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from "react-router-dom";
 
-import Fade from 'react-bootstrap/Fade'
+import FieldInput from 'components/fieldInput';
 
 import { StoreContext } from 'util/store';
 import { auth } from 'util/fetch';
@@ -20,7 +20,7 @@ const StyledDiv = styled.div`
     width: 50%;
     height: 50%;
     flex-direction: column;
-  }
+  };
   .field_container {
     position: relative;
     padding: 15px 0 0;
@@ -30,55 +30,7 @@ const StyledDiv = styled.div`
   .title_registration {
     margin-top: 1em;
     font-size: ${props => 5 * props.width}em;
-  }
-  .name {
-    color: white;
-    font-family: inherit;
-    width: 100%;
-    border: 0;
-    border-bottom: 2px solid white;
-    outline: 0;
-    font-size: ${props => 3 * props.width}em;
-    padding: 7px 0;
-    background: transparent;
-    transition: border-color 0.2s;
-    &::placeholder {
-      color: transparent;
-    };
-  
-    &:placeholder-shown ~ .label {
-      font-size: ${props => 4 * props.width}rem;
-      cursor: text;
-      top: 20px;
-    };
   };
-  .label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: ${props => 2 * props.width}rem;
-  };
-  .name:focus {
-    ~ .label {
-      position: absolute;
-      top: -${props => 35 * props.width}%;
-      display: block;
-      transition: 0.2s;
-      font-size: ${props => 3 * props.width}rem;
-      color: red;
-      font-weight:700;    
-    };
-    padding-bottom: 6px;
-    font-weight: 700;
-    border-width: 5px;
-    border-image: linear-gradient(to right, red, blue);
-    border-image-slice: 1;
-  };
-  .info {
-    width: 100%;
-  }
- };
 `;
 
 const Login = () => {
@@ -90,7 +42,6 @@ const Login = () => {
   const [ info, setInfo ] = useState({});
   const [ dataBuffer, setDataBuffer ] = useState('');
   const [ current, setCurrent ] = useState(0);
-  const [ failedMsg, setFailedMsg ] = useState('');
   const [ title, setTitle ] = useState('Masuk');
   const history = useHistory();
 
@@ -116,6 +67,7 @@ const Login = () => {
         } else {
           try {
             const { token } = await hasil.json();
+            console.log(token);
             setUserInfo(token);
             history.push(`/room/`);
           } catch (err) {
@@ -137,41 +89,28 @@ const Login = () => {
       type: 'text',
       min: 5,
       max: 10,
-      litleInfo: 'Jangan ada spasi.' 
+      litleInfo: '' 
     },
     { 
       name: 'Password', 
       type: 'password',
       min: 0,
       max: 20,
-      litleInfo: 'Jangan aneh-aneh. Kalau lupa gak bisa direset.' 
+      litleInfo: ''
     }
-  ].map((field, i) => (
-    <Fade in={i === current} unmountOnExit={true} key={field.name}>
-      <div className='container centered'>
-        <div className='field_container'>
-          <input 
-            id={field.name}
-            className="name"
-            type={field.type}
-            minLength={field.min}
-            maxLength={field.max}
-            value={dataBuffer}
-            autoFocus={current !== 0}
-            placeholder="Jangan"
-            onChange={(e) => setDataBuffer(e.target.value)}
-            onKeyUp={(e) => e.keyCode === 13 ? handleSubmit(field.name) : null}/>
-          <label htmlFor={field.name} className="label">{field.name}</label>
-        </div>
-        <div className='info'>{field.litleInfo}</div>
-      </div>
-    </Fade>
-  ))
+  ];
 
   return (
     <StyledDiv width={globalWidthState}>
       <h1 className='title_registration'>{title}</h1>
-      {fields}
+      <FieldInput 
+        width={globalWidthState}
+        show={current}
+        bufferHandler={setDataBuffer}
+        bufferValue={dataBuffer}
+        submitHandler={handleSubmit}
+        data={fields}
+      />
     </StyledDiv>
   );
 };
