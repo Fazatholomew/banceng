@@ -16,3 +16,8 @@ gameState = {
 }
 
 Figure out disconnect mechanism using keeping track of socket id
+create winning 7 games mechanism
+create loading mechanism
+only emit useful info
+Urutan orang yang bener
+Title mechanism

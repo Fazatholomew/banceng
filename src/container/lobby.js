@@ -1,11 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 
 import FieldInput from 'components/fieldInput';
 
 import { StoreContext } from 'util/store';
-import { newRoom, checkRoom } from 'util/fetch';
+import { newRoom } from 'util/fetch';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -38,29 +38,24 @@ const Lobby = () => {
   const globalStore = useContext(StoreContext);
   const [ globalWidthState ] = globalStore.globalWidth;
   const { userInfoState } = globalStore.userInfo;
+  const { getGlobalError } = globalStore.globalError;
   const { token } = userInfoState;
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState('');
   const [title, setTitle] = useState('Masuk Lapak');
+
+  useEffect(() => {
+    const error = getGlobalError();
+    if (error.length > 0) {
+      setTitle(error);
+    }
+  }, [])
 
   const handleSubmit = async () => {
     if (room) {
       if (room.length === 10) {
-        const response = await checkRoom({token, roomId: room});
-        if (response.status === 500) {
-          setTitle('Ada error coba lagi.');
-        } else if (response.status === 429) {
-          setTitle('Lapak penuh');
-          setRoom('');
-        } else {
-          try {
-            const { roomId } = await response.json();
-            history.push(`/room/${roomId}`);
-          } catch (err) {
-            setTitle('Ada error coba lagi.');
-            console.log(err)
-          }
-        }
-        history.push(`/room/${room}`)
+        history.push(`/room/${room}`);
+      } else {
+        setTitle('Ngawur, gak ada lapaknya!');
       }
     } else {
       console.log('asking for new room');
@@ -70,6 +65,7 @@ const Lobby = () => {
       } else {
         try {
           const { roomId } = await response.json();
+          console.log(roomId);
           history.push(`/room/${roomId}`);
         } catch (err) {
           setTitle('Ada error coba lagi.');

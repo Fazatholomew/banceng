@@ -14,6 +14,7 @@ export default ({ children }) => {
   const [globalWaitState, setGlobalWait] = useState(true);
   const [waitState, setWait] = useState(false);
   const [userInfoState, _setUserInfo] = useState({});
+  const [_globalError, setGlobalError] = useState('');
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -56,6 +57,12 @@ export default ({ children }) => {
     setGlobalWait(false);
   }
 
+  const getGlobalError = () => {
+    const error = '' + _globalError;
+    setGlobalError('');
+    return error;
+  }
+
   const store = {
     globalWidth: [globalWidthState, setGlobalWidth],
     isPlaying: [isPlayingState, setPlaying],
@@ -65,7 +72,8 @@ export default ({ children }) => {
     room: {roomState, setRoom},
     userInfo: {userInfoState, setUserInfo},
     wait: {waitState, setWait},
-    globalWait: {globalWaitState, setGlobalWait}
+    globalWait: {globalWaitState, setGlobalWait},
+    globalError: {getGlobalError, setGlobalError}
   };
   return (
     <StoreContext.Provider value={store}>

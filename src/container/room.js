@@ -33,6 +33,7 @@ const Room = () => {
   const { selectedCardReducer } = globalStore.selectedCard;
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
+  const [isShown, setIsShown] = useState(false);
   const { playingCardState, setPlayingCard } = globalStore.playingCard;
   const { roomId } = useParams();
   const { userInfoState } = globalStore.userInfo;
@@ -152,6 +153,11 @@ const Room = () => {
   
   return (
     <div style={container}>
+        <Catet
+          isShown={isShown} 
+          clickHandler={() => setIsShown(!isShown)} 
+          players={roomState.players}
+      />
       <OpponentCards data={opponents}/>
       <PlayingCards 
         kocokHandler={kocokHandler}

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Switch, Route, useHistory, Redirect, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Signup from 'container/signup';
 import Login from 'container/login';
 import Room from 'container/room';
 import Lobby from 'container/lobby';
-import { ProtectedRoute, AuthRoute } from 'components/customRoute';
+import { ProtectedRoute, AuthRoute, RoomRoute } from 'components/customRoute';
 import { StoreContext } from 'util/store';
 
 
@@ -16,18 +16,11 @@ const StyledDiv = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 3vw;
-  };
   .content {
     display: flex;
     flex-direction: column;
-    max-width: 95vw;
     overflow: hidden;
-    width: 97vw;
+    width: 100%;
     height: 100%;
     padding: 0.5em;
   };
@@ -58,6 +51,9 @@ const App = () => {
   const globalStore = useContext(StoreContext);
   const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
   const { userInfoState, setUserInfo } = globalStore.userInfo;
+  const { setGlobalWait } = globalStore.globalWait;
+  const history = useHistory();
+  
   const changeWidth = () => {
     if (window.innerWidth < 900 * globalWidthState) {
       setGlobalWidth(window.innerWidth / 1700);
@@ -79,24 +75,29 @@ const App = () => {
       if (userInfoState.token) {
         const token = JSON.stringify({ userId: userInfoState.userId, token: userInfoState.token })
         localStorage.setItem('rahasiaKita', token);
+      } else {
+        setGlobalWait(false);
       }
     }
   }, [userInfoState]);
 
   return (
     <StyledDiv width={globalWidthState}>
-      <div className='navbar'>
-        <div>Home</div>
-        <div>Profile</div>
-      </div>
       <div className='content'>
-        <div className='title centered'>Banceng Mowal?</div>
+        <div>
+          <div onClick={() => history.push('/')} className='title centered hoverable'>Banceng Mowal?</div>
+        </div>
         <div className='page centered'>
           <Switch>
+            <Route path='/' exact><Redirect to='/room'/></Route>
             <AuthRoute path="/signup" component={Signup} exact/>
             <AuthRoute path="/login" component={Login} exact/>
             <ProtectedRoute path="/room/" component={Lobby} exact/>
-            <ProtectedRoute path="/room/:roomId" component={Room}/>
+            <ProtectedRoute path="/room/:roomId">
+              <RoomRoute>
+                <Room/>
+              </RoomRoute>
+            </ProtectedRoute>
           </Switch>
         </div>
         <div className='footer centered'>This is footer</div>

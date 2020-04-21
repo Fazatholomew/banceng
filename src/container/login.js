@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import FieldInput from 'components/fieldInput';
 
@@ -42,9 +42,10 @@ const Login = () => {
   const [ info, setInfo ] = useState({});
   const [ dataBuffer, setDataBuffer ] = useState('');
   const [ current, setCurrent ] = useState(0);
-  const [ title, setTitle ] = useState('Masuk');
+  const [ title, setTitle ] = useState('Masukin Dulu');
   const history = useHistory();
-
+  const { pathname } = useLocation().state;
+  
   const handleSubmit = async (name) => {
     if (dataBuffer.length > 0) {
       if (current < 1) {
@@ -53,7 +54,7 @@ const Login = () => {
         setInfo(newData);
         setCurrent(current + 1);
         setDataBuffer('');
-        setTitle('Masuk');
+        setTitle('Masukin Dulu');
       } else {
         const hasil = await auth({ userId: info.userid, password: dataBuffer, type: 'login' })
         if (hasil.status === 403) {
@@ -67,9 +68,8 @@ const Login = () => {
         } else {
           try {
             const { token } = await hasil.json();
-            console.log(token);
             setUserInfo(token);
-            history.push(`/room/`);
+            history.push(pathname || '/room');
           } catch (err) {
             setTitle('Ada error coba lagi.');
             setCurrent(0);
@@ -111,6 +111,7 @@ const Login = () => {
         submitHandler={handleSubmit}
         data={fields}
       />
+      <div className='hoverable' onClick={() => history.push('signup')}>Daftar</div>
     </StyledDiv>
   );
 };
