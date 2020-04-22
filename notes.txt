@@ -15,9 +15,19 @@ gameState = {
   round: 0,
 }
 
-Figure out disconnect mechanism using keeping track of socket id
-create winning 7 games mechanism
-create loading mechanism
+
+
 only emit useful info
 Urutan orang yang bener
 Title mechanism
+
+Future Features:
+1. Classmen
+  create winning 7 games mechanism
+  tiga tempe if game 0
+2. protected lapak
+3. animation
+  create loading mechanism
+4. Dashboard
+  turn log into database
+  make seperate database for web info

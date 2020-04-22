@@ -64,8 +64,9 @@ const Room = () => {
         }
       });
     return () => { 
-      console.log('leaving...')
-      socket.emit('leaveRoom', { roomId, userId });};
+      console.log('leaving...');
+      socket.disconnect();
+    }
   }, []); // eslint-disable-line
 
   useEffect(() => {
@@ -91,6 +92,14 @@ const Room = () => {
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
       setRoom({...roomState, players, game, isTurn: currentTurn === userId, round});
+    });
+
+    socket.on('disconnect', (reason) => {
+      if (reason === 'io server disconnect') {
+        // the disconnection was initiated by the server, you need to reconnect manually
+        socket.connect();
+      }
+      // else the socket will automatically try to reconnect
     });
   }, []); // eslint-disable-line
 
@@ -157,6 +166,7 @@ const Room = () => {
           isShown={isShown} 
           clickHandler={() => setIsShown(!isShown)} 
           players={roomState.players}
+          game={roomState.game}
       />
       <OpponentCards data={opponents}/>
       <PlayingCards 
