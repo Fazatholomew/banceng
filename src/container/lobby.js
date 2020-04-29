@@ -39,6 +39,7 @@ const Lobby = () => {
   const [ globalWidthState ] = globalStore.globalWidth;
   const { userInfoState } = globalStore.userInfo;
   const { getGlobalError } = globalStore.globalError;
+  const { setUserInfo } = globalStore.userInfo;
   const { token } = userInfoState;
   const [room, setRoom] = useState('');
   const [title, setTitle] = useState('Masuk Lapak');
@@ -75,6 +76,12 @@ const Lobby = () => {
     }
   }
 
+  const handleLogout = () => {
+    localStorage.clear();
+    setUserInfo();
+    history.push('/');
+  }
+
   const fields = [
     {
       name: 'RoomID', 
@@ -95,6 +102,7 @@ const Lobby = () => {
         submitHandler={handleSubmit}
         data={fields}
       />
+      <div className='hoverable' onClick={handleLogout}>Logout</div>
   </StyledDiv>
   )
 };

@@ -17,9 +17,11 @@ const StyledDiv = styled.div`
   .name{
     font-size: ${props => 2 * props.width}em;
     margin-top: 0.2em;
+    color: white;
   };
   .isTurning{
     text-shadow: -1px 0 yellow, 0 1px yellow, 1px 0 black, 0 -1px yellow;
+    color: navy;
   };
   .name[data-left]:after {
     content: attr(data-left);

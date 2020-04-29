@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import io from 'socket.io-client';
 
 import { StoreContext } from 'util/store';
@@ -31,12 +31,15 @@ const Room = () => {
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
   const {roomState, setRoom} = globalStore.room;
   const { selectedCardReducer } = globalStore.selectedCard;
+  const { setGlobalTitle } = globalStore.title;
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
   const [isShown, setIsShown] = useState(false);
   const { playingCardState, setPlayingCard } = globalStore.playingCard;
   const { roomId } = useParams();
+  const history = useHistory();
   const { userInfoState } = globalStore.userInfo;
+  const { setGlobalError } = globalStore.globalError;
   const { userId, token } = userInfoState;
 
   const setUserCards = (displayNames) => {
@@ -52,7 +55,7 @@ const Room = () => {
   };
   useEffect(() => {
     changeWidth();
-  }, [window.innerWidth]);
+  }, [window.innerWidth]); // eslint-disable-line
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -60,11 +63,30 @@ const Room = () => {
       console.log(JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}));
       socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
         if(error) {
-          console.log(error);
+          switch(error) {
+            case "You're already in the room":
+              setGlobalError('Udah di dalem, ngapain masuk lagi?');
+              history.push('/');
+              break;
+            
+            case "Room is on a game":
+              setGlobalError('Kalem se-game dulu.');
+              history.push('/');
+              break;
+
+            case "Room is full":
+              setGlobalError('Lapak penuh.');
+              history.push('/');
+              break;
+            
+            default:
+              history.push('/');
+              break;
+          }
         }
       });
     return () => { 
-      console.log('leaving...');
+      setGlobalTitle();
       socket.disconnect();
     }
   }, []); // eslint-disable-line
@@ -76,17 +98,21 @@ const Room = () => {
       const { room } = payloadParsed;
       console.log(payloadParsed);
       console.log(room);
-      const { gameState, isPlaying } = room;
+      const { gameState, isPlaying, title, order} = room;
       const { players, playingCards, currentTurn, game, round } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
       const rawUser = players.filter((user) => user.userId === userId)[0];
+      setGlobalTitle(title);
       selectedCardReducer('reset');
-      setOpponents(rawOpponent.map((user) => ({
-        userId: user.userId,
-        name: user.name,
-        cards: user.cards.length, 
-        isTurning: currentTurn === user.userId
-      })));  
+      setOpponents(order[userId].map((id) => { 
+        const user = rawOpponent.filter((user) => user.userId === id)[0];
+        return {
+          userId: user.userId,
+          name: user.name,
+          cards: user.cards.length, 
+          isTurning: currentTurn === user.userId
+        }
+      }));  
       setPlayingCard(playingCards);
       console.log(rawUser.cards);
       setUserCards(rawUser.cards);
@@ -169,6 +195,10 @@ const Room = () => {
           game={roomState.game}
       />
       <OpponentCards data={opponents}/>
+      {isPlayingState ? null : <div className='centered' style={{flexDirection: 'column', color: 'white'}}>
+        <div>Link: https://banceng.jimmyganteng.com/room/{roomId}</div>
+        <div>Room ID: {roomId}</div>
+      </div>}
       <PlayingCards 
         kocokHandler={kocokHandler}
         lawanHandler={lawanHandler}

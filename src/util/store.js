@@ -15,6 +15,7 @@ export default ({ children }) => {
   const [waitState, setWait] = useState(false);
   const [userInfoState, _setUserInfo] = useState({});
   const [_globalError, setGlobalError] = useState('');
+  const [globalTitle, _setGlobalTitle] = useState('Banceng Mowal?');
 
   const selectedCardReducer = (action, payload) => {
     const bufferCard = selectedCardState;
@@ -63,6 +64,10 @@ export default ({ children }) => {
     return error;
   }
 
+  const setGlobalTitle = (title) => {
+    title ? _setGlobalTitle(title) : _setGlobalTitle('Banceng Mowal?');
+  };
+  
   const store = {
     globalWidth: [globalWidthState, setGlobalWidth],
     isPlaying: [isPlayingState, setPlaying],
@@ -73,7 +78,8 @@ export default ({ children }) => {
     userInfo: {userInfoState, setUserInfo},
     wait: {waitState, setWait},
     globalWait: {globalWaitState, setGlobalWait},
-    globalError: {getGlobalError, setGlobalError}
+    globalError: {getGlobalError, setGlobalError},
+    title: {globalTitle, setGlobalTitle}
   };
   return (
     <StoreContext.Provider value={store}>

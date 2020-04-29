@@ -15,11 +15,10 @@ gameState = {
   round: 0,
 }
 
-
-
-only emit useful info
-Urutan orang yang bener
-Title mechanism
+Deploying:
+- Change Console.log to log file
+- Delete Not related files
+- Change Variables in example.env
 
 Future Features:
 1. Classmen

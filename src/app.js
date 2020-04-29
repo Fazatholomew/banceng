@@ -28,7 +28,7 @@ const StyledDiv = styled.div`
     height: 20vh;
     width: 100%;
     font-family: customFont;
-    font-size: ${props => props.width * 10}em;
+    font-size: ${props => props.width * (props.titleLength > 20 ? 7 : 10)}em;
     color: white;
     text-shadow: 0.1em 0.1em 0px #000000;
   };
@@ -52,6 +52,7 @@ const App = () => {
   const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
   const { userInfoState, setUserInfo } = globalStore.userInfo;
   const { setGlobalWait } = globalStore.globalWait;
+  const { globalTitle } = globalStore.title;
   const history = useHistory();
   
   const changeWidth = () => {
@@ -82,10 +83,10 @@ const App = () => {
   }, [userInfoState]);
 
   return (
-    <StyledDiv width={globalWidthState}>
+    <StyledDiv width={globalWidthState} titleLength={globalTitle.length}>
       <div className='content'>
         <div>
-          <div onClick={() => history.push('/')} className='title centered hoverable'>Banceng Mowal?</div>
+          <div onClick={() => history.push('/')} className='title centered hoverable'>{globalTitle}</div>
         </div>
         <div className='page centered'>
           <Switch>
