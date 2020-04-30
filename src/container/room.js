@@ -20,7 +20,8 @@ const container = {
   height: '100%'
 };
 
-const ENDPOINT = 'http://localhost:8080';
+const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT;
+const link = process.env.REACT_APP_ENDPOINT;
 let socket;
 
 const Room = () => {
@@ -196,7 +197,7 @@ const Room = () => {
       />
       <OpponentCards data={opponents}/>
       {isPlayingState ? null : <div className='centered' style={{flexDirection: 'column', color: 'white'}}>
-        <div>Link: https://banceng.jimmyganteng.com/room/{roomId}</div>
+        <div>Link: {`${link}/room/${roomId}`}</div>
         <div>Room ID: {roomId}</div>
       </div>}
       <PlayingCards 
