@@ -74,7 +74,7 @@ const Login = () => {
             setTitle('Ada error coba lagi.');
             setCurrent(0);
             setDataBuffer(info.userid);
-            console.log(err)
+            //console.log(err)
           }
         }
       }

@@ -1,5 +1,4 @@
 const { paket, facesRange, numberValues } = require('./card');
-const { CardSequence } = require('./cardSequence');
 
 export const compare = (table, hand) => {
   // Compare if cards in hand can beat what's in the table

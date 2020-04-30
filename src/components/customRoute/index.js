@@ -19,11 +19,11 @@ export const ProtectedRoute = ({...props}) => {
       }
       setRender(true);
     }
-  }, [globalWaitState])
-  console.log('auth')
-  console.log(authenticated, render, globalWaitState);
+  }, [globalWaitState]) // eslint-disable-line
+  //console.log('auth')
+  //console.log(authenticated, render, globalWaitState);
   if (render) {
-    console.log(authenticated);
+    //console.log(authenticated);
     return authenticated ? <Route {...props} /> : 
       <Redirect 
         to={{
@@ -78,7 +78,7 @@ export const RoomRoute = ({...props}) => {
       setRender(true);
     }
     fetchCheckRoom();
-  }, [])
+  }, []) // eslint-disable-line
 
     if (render) {
       return error ? <Redirect to='/room'/> : <Route {...props} />;

@@ -50,7 +50,7 @@ const Card = ({ width , isClickable, isShown, cardObj, clickHandler}) => {
   const onPressHandle = () => {
     // toggle isSelected state
     if(clickHandler) {
-      console.log('clicked');
+      //console.log('clicked');
       
       clickHandler(isSelected, cardObj.displayName);
     }

@@ -57,5 +57,3 @@ const OpponentCards = ({ data=[] }) => {
 };
 
 export default OpponentCards;
-
-// supposed to be name not userId temporary

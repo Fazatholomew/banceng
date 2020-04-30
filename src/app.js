@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Switch, Route, useHistory, Redirect, useParams } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Signup from 'container/signup';
@@ -39,7 +39,7 @@ const StyledDiv = styled.div`
   }
   .footer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     color: white;
     width: 100%;
@@ -63,7 +63,7 @@ const App = () => {
 
   useEffect(() => {
     changeWidth();
-  }, [window.innerWidth]);
+  }, [window.innerWidth]); // eslint-disable-line
 
   useEffect(() => {
     const savedInfo = localStorage.getItem('rahasiaKita');
@@ -80,7 +80,7 @@ const App = () => {
         setGlobalWait(false);
       }
     }
-  }, [userInfoState]);
+  }, [userInfoState]); // eslint-disable-line
 
   return (
     <StyledDiv width={globalWidthState} titleLength={globalTitle.length}>
@@ -101,7 +101,10 @@ const App = () => {
             </ProtectedRoute>
           </Switch>
         </div>
-        <div className='footer centered'>This is footer</div>
+        <div className='footer centered'>
+          <div>Copyright © 2020 Jimmy 'Bang Koboi'</div> 
+          <div><a href='https://github.com/Fazatholomew/banceng'>Github</a></div>
+        </div>
       </div>
     </StyledDiv>
   )

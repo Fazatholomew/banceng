@@ -14,7 +14,7 @@ export const auth = async ({ userId, password, type }) => {
     });
     return response;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };
 
@@ -31,7 +31,7 @@ export const newRoom = async ({token}) => {
     });
     return response;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };
 
@@ -48,6 +48,6 @@ export const checkRoom = async ({token, roomId}) => {
     });
     return response;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };

@@ -59,8 +59,8 @@ const Room = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-      console.log("connecting socket....");
-      console.log(JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}));
+      //console.log("connecting socket....");
+      //console.log(JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}));
       socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
         if(error) {
           switch(error) {
@@ -96,8 +96,8 @@ const Room = () => {
       // Update current game state
       const payloadParsed = JSON.parse(payload);
       const { room } = payloadParsed;
-      console.log(payloadParsed);
-      console.log(room);
+      //console.log(payloadParsed);
+      //console.log(room);
       const { gameState, isPlaying, title, order} = room;
       const { players, playingCards, currentTurn, game, round } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
@@ -114,7 +114,7 @@ const Room = () => {
         }
       }));  
       setPlayingCard(playingCards);
-      console.log(rawUser.cards);
+      //console.log(rawUser.cards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
       setRoom({...roomState, players, game, isTurn: currentTurn === userId, round});
@@ -146,7 +146,7 @@ const Room = () => {
         // supposed to be id but name is used for now
       });
       socket.emit('room', JSON.stringify({ token, type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
-        console.log(error);
+        //console.log(error);
       });
     }
   }
@@ -161,17 +161,17 @@ const Room = () => {
         type: 'NUTUP',
         payload: { roomId, userId }
       }), ({error}) => {
-        console.log(error);
+        //console.log(error);
       });
     } else {
-      console.log('lawan', cards);
+      //console.log('lawan', cards);
       const displayNames = cards.cards.map((card) => card.displayName);
       socket.emit('room', JSON.stringify({
         token,
         type: 'LAWAN',
         payload: { cards: displayNames, roomId, userId }
       }), ({error}) => {
-        console.log(error);
+        //console.log(error);
       });
     }
   };
@@ -182,7 +182,7 @@ const Room = () => {
       type: 'CUSS',
       payload: { roomId, userId }
     }), ({error}) => {
-      console.log(error);
+      //console.log(error);
     });
   };
   

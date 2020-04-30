@@ -49,7 +49,7 @@ const Lobby = () => {
     if (error.length > 0) {
       setTitle(error);
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   const handleSubmit = async () => {
     if (room) {
@@ -59,18 +59,18 @@ const Lobby = () => {
         setTitle('Ngawur, gak ada lapaknya!');
       }
     } else {
-      console.log('asking for new room');
+      //console.log('asking for new room');
       const response = await newRoom({token});
       if (response.status === 500) {
         setTitle('Ada error coba lagi.');
       } else {
         try {
           const { roomId } = await response.json();
-          console.log(roomId);
+          //console.log(roomId);
           history.push(`/room/${roomId}`);
         } catch (err) {
           setTitle('Ada error coba lagi.');
-          console.log(err)
+          //console.log(err)
         }
       }
     }
