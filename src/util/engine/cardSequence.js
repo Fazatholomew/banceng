@@ -16,10 +16,12 @@ const recognize = (seq) => {
   const countFaces = {};
   cardNumbers.forEach((x) => { countNumbers[x] = (countNumbers[x] || 0) + 1; });
   cardFaces.forEach((x) => { countFaces[x] = (countFaces[x] || 0) + 1; });
+  //console.log('recognize', countNumbers);
+  //console.log('length', Object.keys(countNumbers).length);
+  
   switch (seq.length) {
     case 1:
       return 'satuan';
-
     case 2:
       return Object.keys(countNumbers).length === 1 ? 'pair' : '';
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
 import Card from 'components/card';
 import Action from './actionButton';
@@ -8,8 +8,8 @@ import { StoreContext } from 'util/store';
 const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn, opponentTotal }) => {
   const globalStore = useContext(StoreContext);
   const { globalWidth } =  globalStore;
-  const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
-  const { playingCardState, setPlayingCard } = globalStore.playingCard;
+  const [isPlayingState ] = globalStore.isPlaying;
+  const { playingCardState } = globalStore.playingCard;
   const { selectedCardState, selectedCardReducer } = globalStore.selectedCard;
   const { isPlayableState } = globalStore.isPlayable;
 
@@ -27,7 +27,7 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn, opponen
       cardObj={card}
     />
   ));
-  console.log(isPlayableState, isTurn, selectedCardState.length > 0, isPlayableState && isTurn && selectedCardState.cards.length > 0);
+  //console.log(isPlayableState, isTurn, selectedCardState.length > 0, isPlayableState && isTurn && selectedCardState.cards.length > 0);
 
   
   return (
@@ -61,5 +61,3 @@ const PlayingCards = ({ kocokHandler, lawanHandler, cussHandler, isTurn, opponen
 };
 
 export default PlayingCards;
-
-// #96281b

@@ -1,9 +1,12 @@
 import React, { useContext, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Login from './components/login';
+import Signup from 'container/signup';
+import Login from 'container/login';
 import Room from 'container/room';
+import Lobby from 'container/lobby';
+import { ProtectedRoute, AuthRoute, RoomRoute } from 'components/customRoute';
 import { StoreContext } from 'util/store';
 
 
@@ -13,18 +16,11 @@ const StyledDiv = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 3vw;
-  };
   .content {
     display: flex;
     flex-direction: column;
-    max-width: 95vw;
     overflow: hidden;
-    width: 97vw;
+    width: 100%;
     height: 100%;
     padding: 0.5em;
   };
@@ -32,7 +28,7 @@ const StyledDiv = styled.div`
     height: 20vh;
     width: 100%;
     font-family: customFont;
-    font-size: ${props => props.width * 10}em;
+    font-size: ${props => props.width * (props.titleLength > 20 ? 7 : 10)}em;
     color: white;
     text-shadow: 0.1em 0.1em 0px #000000;
   };
@@ -43,7 +39,7 @@ const StyledDiv = styled.div`
   }
   .footer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     color: white;
     width: 100%;
@@ -52,30 +48,63 @@ const StyledDiv = styled.div`
 `;
 
 const App = () => {
-  const [ globalWidthState, setGlobalWidth ] =  useContext(StoreContext).globalWidth;
+  const globalStore = useContext(StoreContext);
+  const [ globalWidthState, setGlobalWidth ] =  globalStore.globalWidth;
+  const { userInfoState, setUserInfo } = globalStore.userInfo;
+  const { setGlobalWait } = globalStore.globalWait;
+  const { globalTitle } = globalStore.title;
+  const history = useHistory();
+  
   const changeWidth = () => {
     if (window.innerWidth < 900 * globalWidthState) {
       setGlobalWidth(window.innerWidth / 1700);
     }
   };
+
   useEffect(() => {
     changeWidth();
-  }, [window.innerWidth]);
+  }, [window.innerWidth]); // eslint-disable-line
+
+  useEffect(() => {
+    const savedInfo = localStorage.getItem('rahasiaKita');
+    if (savedInfo) {
+      const { token } = JSON.parse(savedInfo);
+      if (!userInfoState.token || userInfoState.token !== token) {
+        setUserInfo(token);
+      }
+    } else {
+      if (userInfoState.token) {
+        const token = JSON.stringify({ userId: userInfoState.userId, token: userInfoState.token })
+        localStorage.setItem('rahasiaKita', token);
+      } else {
+        setGlobalWait(false);
+      }
+    }
+  }, [userInfoState]); // eslint-disable-line
+
   return (
-    <StyledDiv width={globalWidthState}>
-      <div className='navbar'>
-        <div>Home</div>
-        <div>Profile</div>
-      </div>
+    <StyledDiv width={globalWidthState} titleLength={globalTitle.length}>
       <div className='content'>
-        <div className='title centered'>Banceng Mowal?</div>
-        <div className='page'>
+        <div>
+          <div onClick={() => history.push('/')} className='title centered hoverable'>{globalTitle}</div>
+        </div>
+        <div className='page centered'>
           <Switch>
-            <Route path="/login" component={Login} exact/>
-            <Route path="/room/:roomId" component={Room}/>
+            <Route path='/' exact><Redirect to='/room'/></Route>
+            <AuthRoute path="/signup" component={Signup} exact/>
+            <AuthRoute path="/login" component={Login} exact/>
+            <ProtectedRoute path="/room/" component={Lobby} exact/>
+            <ProtectedRoute path="/room/:roomId">
+              <RoomRoute>
+                <Room/>
+              </RoomRoute>
+            </ProtectedRoute>
           </Switch>
         </div>
-        <div className='footer centered'>This is footer</div>
+        <div className='footer centered'>
+          <div>Copyright © 2020 Jimmy 'Bang Koboi'</div> 
+          <div><a href='https://github.com/Fazatholomew/banceng'>Github</a></div>
+        </div>
       </div>
     </StyledDiv>
   )

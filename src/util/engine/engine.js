@@ -1,5 +1,4 @@
 const { paket, facesRange, numberValues } = require('./card');
-const { CardSequence } = require('./cardSequence');
 
 export const compare = (table, hand) => {
   // Compare if cards in hand can beat what's in the table
@@ -13,13 +12,13 @@ export const compare = (table, hand) => {
   if (table.length === hand.length) {
     switch (table.length) {
       case 1:
-        return hand.cards[0].value > table.cards[0].value;
+        return table.type === hand.type ? hand.cards[0].value > table.cards[0].value : false;
 
       case 2:
-        return hand.cards[1].value > table.cards[1].value;
+        return table.type === hand.type ? hand.cards[1].value > table.cards[1].value : false;
 
       case 3:
-        return hand.cards[1].value > table.cards[1].value;
+        return table.type === hand.type ? hand.cards[1].value > table.cards[1].value : false;
 
       case 5:
         if (table.type === hand.type) {

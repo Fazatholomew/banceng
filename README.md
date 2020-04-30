@@ -1,46 +1,20 @@
-## Functionality
+Simple Capsa Poker Game Using React JS
+---------------------------------------
 
-### Dealing
+Inspired by [this repo](https://github.com/chmccc/poker), this game is [Capsa](https://en.wikipedia.org/wiki/Big_two) Poker implementation in Bahasa and Sundanese. Most of the rules are agreed upon rules that local people inherit. This repo is the Front-End part of entire game. Visit [this repo](https://github.com/Fazatholomew/bancengserver) to look into the Back-End part.
 
-- set proper card distribution at each game stage ✔️
+## Technology
 
-### Score checking
+* [React JS](https://reactjs.org/)
+* [React Router](https://reacttraining.com/react-router/)
+* [JWT](https://jwt.io/)
+* [Chai JS](https://www.chaijs.com/)
+* [Socket.io](https://socket.io/)
 
-- test & build score object creator for 5-card hands ✔️
-- test & build best score function for 7-card hands ✔️
-- determine winners between hands ✔️
-- determine winners based on kicker cards ✔️
+## Future Features
 
-### Ability to fold
+* Scoreboard of all played games
+* Protected Rooms
+* Smooth animation transition
 
-- not scoring a folded player ✔️
-
-#### Ability to bet
-
-#### Ability to raise
-
-### AI strategy
-
-- when to fold
-- when to call
-- when to raise
-
-## Display and messaging
-
-### Display
-
-- show a tabletop with 4 positions and space for table cards ✔️
-- should show a "next stage" button initially ✔️
-- should highlight cards used in winning hand once round is over ✔️
-- show controls at the bottom right ✔️
-
-### Folding
-
-- fold button in control panel ✔️
-- game should continue until final stage until player folds ✔️
-- players who've folded should have their cards "greyed out"
-
-
-### Message window
-- should report the winner of a hand ✔️
-- should report when a hand was won by a high card ✔️
+> Buatan Bandung.

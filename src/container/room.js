@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import io from 'socket.io-client';
 
 import { StoreContext } from 'util/store';
@@ -20,7 +20,8 @@ const container = {
   height: '100%'
 };
 
-const ENDPOINT = 'http://localhost:8080';
+const ENDPOINT = process.env.REACT_APP_SERVER_ENDPOINT;
+const link = process.env.REACT_APP_ENDPOINT;
 let socket;
 
 const Room = () => {
@@ -31,11 +32,16 @@ const Room = () => {
   const [isPlayingState, setIsPlaying] = globalStore.isPlaying;
   const {roomState, setRoom} = globalStore.room;
   const { selectedCardReducer } = globalStore.selectedCard;
+  const { setGlobalTitle } = globalStore.title;
   const [userCards, _setUserCards] = useState([]);
   const [opponents, setOpponents] = useState([]);
+  const [isShown, setIsShown] = useState(false);
   const { playingCardState, setPlayingCard } = globalStore.playingCard;
   const { roomId } = useParams();
-  const { userId } = globalStore.userInfo;
+  const history = useHistory();
+  const { userInfoState } = globalStore.userInfo;
+  const { setGlobalError } = globalStore.globalError;
+  const { userId, token } = userInfoState;
 
   const setUserCards = (displayNames) => {
     const cards = new CardSequence();
@@ -50,19 +56,40 @@ const Room = () => {
   };
   useEffect(() => {
     changeWidth();
-  }, [window.innerWidth]);
+  }, [window.innerWidth]); // eslint-disable-line
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    console.log("connecting socket....");
-    socket.emit('room', JSON.stringify({ type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
-      if(error) {
-        console.log(error);
-      }
-    });
+      //console.log("connecting socket....");
+      //console.log(JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}));
+      socket.emit('room', JSON.stringify({ token, type: 'ENTER ROOM',  payload: { roomId, userId }}), ({error}) => {
+        if(error) {
+          switch(error) {
+            case "You're already in the room":
+              setGlobalError('Udah di dalem, ngapain masuk lagi?');
+              history.push('/');
+              break;
+            
+            case "Room is on a game":
+              setGlobalError('Kalem se-game dulu.');
+              history.push('/');
+              break;
+
+            case "Room is full":
+              setGlobalError('Lapak penuh.');
+              history.push('/');
+              break;
+            
+            default:
+              history.push('/');
+              break;
+          }
+        }
+      });
     return () => { 
-      console.log('leaving...')
-      socket.emit('leaveRoom', { roomId, userId });};
+      setGlobalTitle();
+      socket.disconnect();
+    }
   }, []); // eslint-disable-line
 
   useEffect(() => {
@@ -70,22 +97,36 @@ const Room = () => {
       // Update current game state
       const payloadParsed = JSON.parse(payload);
       const { room } = payloadParsed;
-      console.log(payloadParsed);
-      console.log(room);
-      const { gameState, isPlaying } = room;
+      //console.log(payloadParsed);
+      //console.log(room);
+      const { gameState, isPlaying, title, order} = room;
       const { players, playingCards, currentTurn, game, round } = gameState;
       const rawOpponent = players.filter((user) => user.userId !== userId);
       const rawUser = players.filter((user) => user.userId === userId)[0];
+      setGlobalTitle(title);
       selectedCardReducer('reset');
-      setOpponents(rawOpponent.map((user) => ({
-        userId: user.userId,
-        name: user.name,
-        cards: user.cards.length, 
-        isTurning: currentTurn === user.userId})));
+      setOpponents(order[userId].map((id) => { 
+        const user = rawOpponent.filter((user) => user.userId === id)[0];
+        return {
+          userId: user.userId,
+          name: user.name,
+          cards: user.cards.length, 
+          isTurning: currentTurn === user.userId
+        }
+      }));  
       setPlayingCard(playingCards);
+      //console.log(rawUser.cards);
       setUserCards(rawUser.cards);
       setIsPlaying(isPlaying);
       setRoom({...roomState, players, game, isTurn: currentTurn === userId, round});
+    });
+
+    socket.on('disconnect', (reason) => {
+      if (reason === 'io server disconnect') {
+        // the disconnection was initiated by the server, you need to reconnect manually
+        socket.connect();
+      }
+      // else the socket will automatically try to reconnect
     });
   }, []); // eslint-disable-line
 
@@ -105,8 +146,8 @@ const Room = () => {
         cards[player.name] = playerCards;
         // supposed to be id but name is used for now
       });
-      socket.emit('room', JSON.stringify({ type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
-        console.log(error);
+      socket.emit('room', JSON.stringify({ token, type: 'START GAME', payload: { cards, roomId, userId } }), ({error}) => {
+        //console.log(error);
       });
     }
   }
@@ -117,35 +158,48 @@ const Room = () => {
     
     if (cards.length === userCards.length) {
       socket.emit('room', JSON.stringify({
+        token,
         type: 'NUTUP',
         payload: { roomId, userId }
       }), ({error}) => {
-        console.log(error);
+        //console.log(error);
       });
     } else {
-      console.log('lawan', cards);
+      //console.log('lawan', cards);
       const displayNames = cards.cards.map((card) => card.displayName);
       socket.emit('room', JSON.stringify({
+        token,
         type: 'LAWAN',
         payload: { cards: displayNames, roomId, userId }
       }), ({error}) => {
-        console.log(error);
+        //console.log(error);
       });
     }
   };
 
   const cussHandler = () => {
     socket.emit('room', JSON.stringify({
+      token,
       type: 'CUSS',
       payload: { roomId, userId }
     }), ({error}) => {
-      console.log(error);
+      //console.log(error);
     });
   };
   
   return (
     <div style={container}>
+        <Catet
+          isShown={isShown} 
+          clickHandler={() => setIsShown(!isShown)} 
+          players={roomState.players}
+          game={roomState.game}
+      />
       <OpponentCards data={opponents}/>
+      {isPlayingState ? null : <div className='centered' style={{flexDirection: 'column', color: 'white'}}>
+        <div>Link: {`${link}/room/${roomId}`}</div>
+        <div>Room ID: {roomId}</div>
+      </div>}
       <PlayingCards 
         kocokHandler={kocokHandler}
         lawanHandler={lawanHandler}
