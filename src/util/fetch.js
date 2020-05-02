@@ -1,6 +1,6 @@
 import { hash } from './auth';
 
-const url = 'http://localhost:8080/';
+const url = process.env.REACT_APP_SERVER_ENDPOINT;
 
 export const auth = async ({ userId, password, type }) => {
   // Wrapper function for fecthing user authentication
