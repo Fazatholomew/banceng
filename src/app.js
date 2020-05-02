@@ -45,6 +45,9 @@ const StyledDiv = styled.div`
     width: 100%;
     height: 5vh;
   };
+  .github {
+    color: white;
+  }
 `;
 
 const App = () => {
@@ -103,7 +106,8 @@ const App = () => {
         </div>
         <div className='footer centered'>
           <div>Copyright © 2020 Jimmy 'Bang Koboi'</div> 
-          <div><a href='https://github.com/Fazatholomew/banceng'>Github</a></div>
+          <div className='github'><a href='https://github.com/Fazatholomew/banceng'>Github</a></div>
+          <div>Buatan Bandung.</div>
         </div>
       </div>
     </StyledDiv>
