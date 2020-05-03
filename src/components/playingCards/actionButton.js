@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { StoreContext } from 'util/store';
 
 const StyledDiv = styled.div`
-  .btn {
+  .button {
     background-color: ${props => props.color};
     color: white;
     font-size: ${props => props.width * 3}em;
@@ -12,7 +12,7 @@ const StyledDiv = styled.div`
     height: 3em;
     border-radius: 10em;
   };
-  .btn:hover{
+  .button:hover{
     cursor: ${props => props.activate ? 'pointer' : 'default'};
   };
 `;
@@ -26,7 +26,7 @@ const { globalWidth } =  useContext(StoreContext);
         className="centered" 
         onClick={active ? clickHandler : null} 
         color={color}>
-        <div className="centered btn">
+        <div className="centered button">
           {text}
         </div>
       </StyledDiv>
