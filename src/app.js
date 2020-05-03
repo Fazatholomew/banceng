@@ -9,6 +9,13 @@ import Lobby from 'container/lobby';
 import { ProtectedRoute, AuthRoute, RoomRoute } from 'components/customRoute';
 import { StoreContext } from 'util/store';
 
+const DefaultPage = () => {
+  const globalStore = useContext(StoreContext);
+  const { setGlobalTitle } = globalStore.title;
+  setGlobalTitle('Mau kemana atuh?');
+  return <Redirect to='/'/>
+}
+
 
 const StyledDiv = styled.div`
   display: flex;
@@ -19,6 +26,7 @@ const StyledDiv = styled.div`
   .content {
     display: flex;
     flex-direction: column;
+    font-family: 'Contrail One', cursive, sans-serif;
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -102,6 +110,7 @@ const App = () => {
                 <Room/>
               </RoomRoute>
             </ProtectedRoute>
+            <Route component={DefaultPage}/>
           </Switch>
         </div>
         <div className='footer centered'>
