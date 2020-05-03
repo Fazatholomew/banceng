@@ -23,6 +23,9 @@ const StyledDiv = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+  a {
+    color: white;
+  }
   .content {
     display: flex;
     flex-direction: column;
@@ -44,7 +47,7 @@ const StyledDiv = styled.div`
     display: flex;
     height: 70vh;
     width: 100%;
-  }
+  };
   .footer {
     display: flex;
     flex-direction: column;
@@ -55,7 +58,7 @@ const StyledDiv = styled.div`
   };
   .github {
     color: white;
-  }
+  };
 `;
 
 const App = () => {
