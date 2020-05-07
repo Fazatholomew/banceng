@@ -15,7 +15,7 @@ const StyledDiv = styled.div`
   box-shadow: 3px 4px rgba(0, 0, 0, 0.2);
   margin: 0.2em;
   border-color: navy;
-  ${props => props.isSelected ? 'border-style: solid;' : ''}
+  ${props => props.isSelected ? `margin-bottom: ${props.width * 2}em;` : ''}
   &:hover{
     cursor: ${props => props.isClickable ? 'pointer' : 'default'};
   };
